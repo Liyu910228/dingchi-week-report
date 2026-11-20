@@ -10,6 +10,7 @@ from apps.accounts.public import AuthenticationError, require_user
 from apps.core.http import api_error, api_success
 
 from .schemas import ChatPayloadError, ChatRequest
+from .services.attachments import AttachmentValidationError
 from .services.openai_chat import (
     AIProviderConfigurationError,
     AIProviderError,
@@ -51,8 +52,9 @@ async def chat_completion(request: HttpRequest) -> JsonResponse:
 
     try:
         chat_request = ChatRequest.from_payload(payload)
-        result = await get_chat_service().complete(chat_request.messages, user=user)
-    except ChatPayloadError as exc:
+        service = await get_chat_service()
+        result = await service.complete(chat_request.messages, user=user)
+    except (ChatPayloadError, AttachmentValidationError) as exc:
         return api_error("INVALID_REQUEST", str(exc), status=400)
     except AIProviderConfigurationError as exc:
         return api_error("AI_NOT_CONFIGURED", str(exc), status=503)

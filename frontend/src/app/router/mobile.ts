@@ -90,6 +90,12 @@ export const mobileRoutes: RouteRecordRaw[] = [
         component: () => import("@/mobile/views/system-settings/CustomerManagementView.vue"),
         meta: { mobile: true, title: "系统设置 - 客户管理" },
       },
+      {
+        path: "models",
+        name: "mobile-system-settings-models",
+        component: () => import("@/views/system-settings/ModelConfigurationView.vue"),
+        meta: { mobile: true, title: "系统设置 - 模型配置" },
+      },
     ],
   },
   {

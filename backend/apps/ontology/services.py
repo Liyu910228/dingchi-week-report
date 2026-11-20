@@ -26,6 +26,7 @@ if _VENDOR.is_dir() and str(_VENDOR) not in sys.path:
 
 _env_lock = threading.Lock()
 _env_ready = False
+_llm_signature: tuple[str, str, str] | None = None
 _retriever_lock = threading.Lock()
 _retrievers: tuple | None = None
 
@@ -33,43 +34,38 @@ MAX_DISPLAY_ROWS = 50
 
 
 def _setup_env() -> None:
-    """把 Django 配置映射为 auto_ontology 需要的环境变量（幂等）。"""
+    """映射 PG 与当前生效的模型配置；管理员改模型后无需重启。"""
     global _env_ready
-    if _env_ready:
-        return
-    with _env_lock:
-        if _env_ready:
-            return
-        mapping = {
-            "POSTGRES_HOST": "ONTOLOGY_PG_HOST",
-            "POSTGRES_PORT": "ONTOLOGY_PG_PORT",
-            "POSTGRES_USER": "ONTOLOGY_PG_USER",
-            "POSTGRES_PASSWORD": "ONTOLOGY_PG_PASSWORD",
-            "POSTGRES_DATABASE": "ONTOLOGY_PG_DATABASE",
-        }
-        for target, source in mapping.items():
-            value = os.environ.get(source)
-            if value:
-                os.environ.setdefault(target, value)
-        os.environ.setdefault("POSTGRES_HOST", "127.0.0.1")
-        os.environ.setdefault("POSTGRES_PORT", "5432")
-        os.environ.setdefault("POSTGRES_USER", "postgres")
-        os.environ.setdefault("POSTGRES_DATABASE", "auto_ontology")
+    from apps.ai_gateway.services.model_config import load_effective_config
 
-        ai_key = os.environ.get("AI_API_KEY") or getattr(settings, "AI_API_KEY", "")
-        ai_base = os.environ.get("AI_BASE_URL") or getattr(settings, "AI_BASE_URL", "")
-        ai_model = os.environ.get("AI_MODEL") or getattr(settings, "AI_MODEL", "qwen-plus")
-        if ai_key:
-            os.environ.setdefault("DEFAULT_MODELS_API_KEY", ai_key)
-        if ai_base:
-            os.environ.setdefault("DEFAULT_MODELS_ENDPOINT", ai_base)
-        os.environ.setdefault("DEFAULT_MODELS_MODEL", ai_model)
-        os.environ.setdefault("REASONING_MODEL", ai_model)
-        os.environ.setdefault("NON_REASONING_MODEL", ai_model)
-        os.environ.setdefault("EMBED_MODEL", "text-embedding-v3")
-        os.environ.setdefault("EMBED_BATCH_SIZE", "10")
-        os.environ.setdefault("EMBED_DIMENSION", "1024")
-        _env_ready = True
+    config = load_effective_config()
+    with _env_lock:
+        if not _env_ready:
+            mapping = {
+                "POSTGRES_HOST": "ONTOLOGY_PG_HOST",
+                "POSTGRES_PORT": "ONTOLOGY_PG_PORT",
+                "POSTGRES_USER": "ONTOLOGY_PG_USER",
+                "POSTGRES_PASSWORD": "ONTOLOGY_PG_PASSWORD",
+                "POSTGRES_DATABASE": "ONTOLOGY_PG_DATABASE",
+            }
+            for target, source in mapping.items():
+                value = os.environ.get(source)
+                if value:
+                    os.environ.setdefault(target, value)
+            os.environ.setdefault("POSTGRES_HOST", "127.0.0.1")
+            os.environ.setdefault("POSTGRES_PORT", "5432")
+            os.environ.setdefault("POSTGRES_USER", "postgres")
+            os.environ.setdefault("POSTGRES_DATABASE", "auto_ontology")
+            os.environ.setdefault("EMBED_MODEL", "text-embedding-v3")
+            os.environ.setdefault("EMBED_BATCH_SIZE", "10")
+            os.environ.setdefault("EMBED_DIMENSION", "1024")
+            _env_ready = True
+
+        os.environ["DEFAULT_MODELS_API_KEY"] = config.api_key
+        os.environ["DEFAULT_MODELS_ENDPOINT"] = config.base_url
+        os.environ["DEFAULT_MODELS_MODEL"] = config.model
+        os.environ["REASONING_MODEL"] = config.model
+        os.environ["NON_REASONING_MODEL"] = config.model
 
 
 def _get_retrievers() -> tuple:
@@ -112,10 +108,20 @@ def _visible_employee_ids(user_id: int) -> list[int] | None:
 
 
 def _ensure_llm_clients() -> None:
-    """main.py 在 import 时初始化 LLM client；若此前 env 未就绪导致为 None，这里兜底重建。"""
+    """main.py 在 import 时初始化 client；配置变化时同步重建。"""
+    global _llm_signature
     from auto_ontology.retrieval.text_to_sql import main as tts_main
 
-    if tts_main.llm_client is None or tts_main.reasoning_llm_client is None:
+    signature = (
+        os.environ.get("DEFAULT_MODELS_API_KEY", ""),
+        os.environ.get("DEFAULT_MODELS_ENDPOINT", ""),
+        os.environ.get("DEFAULT_MODELS_MODEL", ""),
+    )
+    if (
+        tts_main.llm_client is None
+        or tts_main.reasoning_llm_client is None
+        or signature != _llm_signature
+    ):
         from auto_ontology.utils.llm_invoke import (
             get_llm_client,
             get_non_reasoning_llm_client,
@@ -123,6 +129,7 @@ def _ensure_llm_clients() -> None:
 
         tts_main.llm_client = get_non_reasoning_llm_client()
         tts_main.reasoning_llm_client = get_llm_client()
+        _llm_signature = signature
 
 
 def ask_for_user(user_id: int, question: str) -> dict[str, Any]:

@@ -1,12 +1,13 @@
 import { defineStore } from "pinia"
 import { computed, ref, watch } from "vue"
 
-import { getErrorMessage } from "@/shared/api/errors"
+import { DEFAULT_ATTACHMENT_PROMPT } from "@/features/chat/attachments"
 import { useAuthStore } from "@/features/auth/store"
+import { getErrorMessage } from "@/shared/api/errors"
 import { createId } from "@/utils/id"
 
-import { createChatCompletion } from "./api"
-import type { ChatEntry, ChatMessage } from "./types"
+import { createChatCompletion, uploadChatAttachment } from "./api"
+import type { ChatAttachment, ChatEntry, ChatMessage } from "./types"
 
 /** 聊天记录按登录用户隔离持久化，key 形如 dingchi.chat.<userId>。 */
 const CHAT_KEY_PREFIX = "dingchi.chat."
@@ -55,19 +56,24 @@ export const useChatStore = defineStore("chat", () => {
     }
   }
 
-  async function send(content: string) {
-    const prompt = content.trim()
+  async function send(content: string, files: File[] = []) {
+    const prompt = content.trim() || (files.length ? DEFAULT_ATTACHMENT_PROMPT : "")
     if (!prompt || isSending.value) return
 
-    messages.value.push({ id: createId(), role: "user", content: prompt })
     isSending.value = true
     error.value = ""
 
     try {
-      const history: ChatMessage[] = messages.value.map(({ role, content: text }) => ({
-        role,
-        content: text,
-      }))
+      const attachments: ChatAttachment[] = []
+      for (const file of files) attachments.push(await uploadChatAttachment(file))
+      messages.value.push({ id: createId(), role: "user", content: prompt, attachments })
+      const history: ChatMessage[] = messages.value.map(
+        ({ role, content: text, attachments: items }) => ({
+          role,
+          content: text,
+          ...(items?.length ? { attachment_ids: items.map((item) => item.id) } : {}),
+        }),
+      )
       const result = await createChatCompletion(history)
       activeModel.value = result.model
       messages.value.push({

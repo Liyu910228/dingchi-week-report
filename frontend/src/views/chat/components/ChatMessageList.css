@@ -43,6 +43,12 @@
   font-weight: 800;
 }
 
+.message-body {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
 .message p {
   margin: 0;
   padding: 0.85rem 1rem;
@@ -64,9 +70,12 @@
   background: var(--green);
 }
 
-.message-user p {
+.message-user .message-body {
   grid-column: 1;
   grid-row: 1;
+}
+
+.message-user p {
   border-radius: 14px 4px 14px 14px;
 }
 
@@ -94,4 +103,3 @@
     max-width: 96%;
   }
 }
-
