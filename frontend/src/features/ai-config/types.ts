@@ -37,3 +37,25 @@ export interface ModelConfigurationTestResult {
   latency_ms: number
   reply: string
 }
+
+export type OCRProvider = "paddleocr" | "mineru"
+
+export interface OCRKeyItem {
+  id: string
+  provider: OCRProvider
+  label: string
+  api_key_masked: string
+  is_enabled: boolean
+  last_used_at: string | null
+  last_status: string
+  last_error: string
+  use_count: number
+  created_at: string | null
+}
+
+export interface OCRKeyCreatePayload {
+  provider: OCRProvider
+  label: string
+  api_key: string
+  is_enabled: boolean
+}

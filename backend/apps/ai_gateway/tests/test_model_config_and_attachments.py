@@ -66,3 +66,12 @@ class ModelConfigPermissionTests(SimpleTestCase):
         response = self.client.get(reverse("ai_gateway:model-config"))
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.json()["error"]["code"], "FORBIDDEN")
+
+    @patch("apps.ai_gateway.model_config_views.require_user")
+    def test_non_admin_cannot_read_ocr_keys(self, require_user) -> None:
+        from types import SimpleNamespace
+
+        require_user.return_value = (SimpleNamespace(id=1), "delivery.manager")
+        response = self.client.get(reverse("ai_gateway:ocr-key-collection"))
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()["error"]["code"], "FORBIDDEN")

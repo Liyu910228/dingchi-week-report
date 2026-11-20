@@ -4,6 +4,8 @@ import type {
   ModelConfiguration,
   ModelConfigurationPayload,
   ModelConfigurationTestResult,
+  OCRKeyCreatePayload,
+  OCRKeyItem,
 } from "./types"
 
 /**
@@ -54,4 +56,25 @@ export function testModelConfiguration(
     url: "/v1/ai/model-config/test/",
     data: payload,
   })
+}
+
+/** OCR Key 仅由系统管理员管理，响应只包含掩码，绝不返回原始密钥。 */
+export function getOCRKeys(): Promise<OCRKeyItem[]> {
+  return request<OCRKeyItem[]>({ method: "GET", url: "/v1/ai/ocr-keys/" })
+}
+
+export function createOCRKey(payload: OCRKeyCreatePayload): Promise<OCRKeyItem> {
+  return request<OCRKeyItem>({ method: "POST", url: "/v1/ai/ocr-keys/", data: payload })
+}
+
+export function setOCRKeyEnabled(id: string, isEnabled: boolean): Promise<OCRKeyItem> {
+  return request<OCRKeyItem>({
+    method: "PATCH",
+    url: `/v1/ai/ocr-keys/${id}/`,
+    data: { is_enabled: isEnabled },
+  })
+}
+
+export function deleteOCRKey(id: string): Promise<{ deleted: boolean }> {
+  return request<{ deleted: boolean }>({ method: "DELETE", url: `/v1/ai/ocr-keys/${id}/` })
 }

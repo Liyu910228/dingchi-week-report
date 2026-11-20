@@ -28,6 +28,36 @@ class AIModelConfig(SnowflakeIdModel):
         ordering = ["-updated_at", "-id"]
 
 
+class AIOCRKey(SnowflakeIdModel):
+    """An encrypted OCR provider credential that can be independently enabled."""
+
+    PROVIDER_PADDLEOCR = "paddleocr"
+    PROVIDER_MINERU = "mineru"
+    PROVIDER_CHOICES = (
+        (PROVIDER_PADDLEOCR, "PaddleOCR"),
+        (PROVIDER_MINERU, "MinerU"),
+    )
+
+    provider = models.CharField(max_length=16, choices=PROVIDER_CHOICES)
+    label = models.CharField(max_length=80, blank=True, default="")
+    api_key = EncryptedPasswordField()
+    is_enabled = models.BooleanField(default=True, db_index=True)
+    last_used_at = models.DateTimeField(null=True, blank=True)
+    last_status = models.CharField(max_length=16, blank=True, default="")
+    last_error = models.CharField(max_length=300, blank=True, default="")
+    use_count = models.PositiveBigIntegerField(default=0)
+    created_by_id = models.BigIntegerField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "ai_ocr_key"
+        ordering = ["provider", "created_at", "id"]
+        indexes = [
+            models.Index(fields=["provider", "is_enabled"], name="idx_ai_ocr_key_enabled"),
+        ]
+
+
 class AIChatAttachment(SnowflakeIdModel):
     """A user-owned, non-public file that may be referenced by chat messages."""
 
@@ -38,6 +68,8 @@ class AIChatAttachment(SnowflakeIdModel):
     file_size = models.BigIntegerField(default=0)
     kind = models.CharField(max_length=16)
     extracted_text = models.TextField(blank=True, default="")
+    extraction_provider = models.CharField(max_length=16, blank=True, default="")
+    extraction_key_id = models.BigIntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

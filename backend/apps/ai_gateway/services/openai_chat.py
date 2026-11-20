@@ -16,6 +16,7 @@ from .attachments import (
     owned_attachments,
 )
 from .model_config import EffectiveAIConfig, load_effective_config
+from .ocr import OCRError, extract_with_ocr, has_enabled_ocr_keys
 from .user_data_tools import TOOLS_SCHEMA, build_user_context, execute_tool
 
 MAX_TOOL_ROUNDS = 6
@@ -60,7 +61,34 @@ class OpenAIChatService:
             timeout=settings.AI_TIMEOUT_SECONDS,
         )
 
+    async def _extract_with_hosted_ocr(self, attachment: AIChatAttachment) -> str:
+        data = await sync_to_async(attachment_path(attachment).read_bytes, thread_sensitive=True)()
+        try:
+            result = await extract_with_ocr(attachment.original_name, data)
+        except OCRError as exc:
+            raise AIProviderError(str(exc)) from exc
+        attachment.extracted_text = result.text[:MAX_EXTRACTED_CHARS]
+        attachment.extraction_provider = result.provider
+        attachment.extraction_key_id = result.key_id
+        await sync_to_async(attachment.save, thread_sensitive=True)(
+            update_fields=[
+                "extracted_text",
+                "extraction_provider",
+                "extraction_key_id",
+                "updated_at",
+            ]
+        )
+        return attachment.extracted_text
+
     async def _describe_image(self, attachment: AIChatAttachment) -> str:
+        if attachment.extracted_text:
+            return attachment.extracted_text
+        configured = await sync_to_async(has_enabled_ocr_keys, thread_sensitive=True)()
+        if configured:
+            return await self._extract_with_hosted_ocr(attachment)
+        return await self._describe_image_with_vision(attachment)
+
+    async def _describe_image_with_vision(self, attachment: AIChatAttachment) -> str:
         if attachment.extracted_text:
             return attachment.extracted_text
         data_url = await sync_to_async(_image_data_url, thread_sensitive=True)(attachment)
@@ -94,8 +122,15 @@ class OpenAIChatService:
         if not text:
             raise AIProviderError("视觉模型未能识别图片内容，请换一张更清晰的图片。")
         attachment.extracted_text = text[:MAX_EXTRACTED_CHARS]
+        attachment.extraction_provider = "vision"
+        attachment.extraction_key_id = None
         await sync_to_async(attachment.save, thread_sensitive=True)(
-            update_fields=["extracted_text", "updated_at"]
+            update_fields=[
+                "extracted_text",
+                "extraction_provider",
+                "extraction_key_id",
+                "updated_at",
+            ]
         )
         return attachment.extracted_text
 
@@ -115,6 +150,16 @@ class OpenAIChatService:
                 attachment = attachment_map[int(value)]
                 if attachment.kind == "image":
                     extracted = await self._describe_image(attachment)
+                elif (
+                    not attachment.extracted_text
+                    and attachment.original_name.lower().endswith(".pdf")
+                ):
+                    configured = await sync_to_async(has_enabled_ocr_keys, thread_sensitive=True)()
+                    if not configured:
+                        raise AIProviderError(
+                            "该 PDF 没有可提取文本，请先在模型配置中启用 PaddleOCR 或 MinerU Key。"
+                        )
+                    extracted = await self._extract_with_hosted_ocr(attachment)
                 else:
                     extracted = attachment.extracted_text
                 if not extracted or remaining_chars <= 0:

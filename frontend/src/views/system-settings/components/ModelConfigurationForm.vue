@@ -55,7 +55,7 @@ const canSubmit = computed(() =>
           placeholder="可选，用于图片理解"
           :disabled="isBusy"
         />
-        <small>用于图片理解，可选；未填写时尝试使用主模型处理图片。</small>
+        <small>未配置已开启的 OCR Key 时用于图片理解；复杂图片仍可使用视觉模型。</small>
       </label>
 
       <label class="form-field form-field-wide">

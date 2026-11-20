@@ -19,6 +19,8 @@ export function createChatCompletion(messages: ChatMessage[]): Promise<ChatResul
     method: "POST",
     url: "/v1/ai/chat/",
     data: { messages },
+    // 云端 OCR 需要提交任务并轮询，聊天请求不能使用默认的 30 秒超时。
+    timeout: 240000,
   })
 }
 

@@ -181,8 +181,8 @@ def save_uploaded_attachment(upload: UploadedFile, user_id: int) -> dict[str, An
         mime_type = "image/jpeg" if extension in {".jpg", ".jpeg"} else f"image/{extension[1:]}"
     else:
         extracted = _clip(_extract_document(extension, data))
-        if not extracted:
-            raise AttachmentValidationError("未能从文件中提取到文本；如为扫描件，请上传清晰截图。")
+        if not extracted and extension != ".pdf":
+            raise AttachmentValidationError("未能从文件中提取到文本，请确认文件内容有效。")
         mime_type = upload.content_type or "application/octet-stream"
 
     storage_name = f"{user_id}/{uuid.uuid4().hex}{extension}"

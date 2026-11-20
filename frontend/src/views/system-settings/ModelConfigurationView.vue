@@ -5,6 +5,7 @@ import NoticeBridge from "@/components/feedback/NoticeBridge.vue"
 
 import ModelConfigurationForm from "./components/ModelConfigurationForm.vue"
 import ModelConfigurationStatus from "./components/ModelConfigurationStatus.vue"
+import OCRKeyPool from "./components/OCRKeyPool.vue"
 import { useModelConfiguration } from "./composables/useModelConfiguration"
 
 const modelConfiguration = useModelConfiguration()
@@ -35,6 +36,7 @@ onMounted(() => {
       :configuration="modelConfiguration.configuration.value"
       :test-result="modelConfiguration.testResult.value"
     />
+    <OCRKeyPool />
   </div>
 </template>
 

@@ -20,6 +20,7 @@ from .services.model_config import (
     serialize_model_config,
     test_model_connection,
 )
+from .services.ocr_keys import create_ocr_key, delete_ocr_key, list_ocr_keys, update_ocr_key
 
 
 def _ensure_admin(request: HttpRequest):
@@ -85,5 +86,36 @@ async def model_config_test_view(request: HttpRequest) -> JsonResponse:
         message = f"连接失败：{exc}"
         await sync_to_async(record_test_result, thread_sensitive=True)(False, message)
         return api_error("AI_CONNECTION_FAILED", message, status=502)
+    except Exception as exc:
+        return _error(exc)
+
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def ocr_key_collection_view(request: HttpRequest) -> JsonResponse:
+    try:
+        user = _ensure_admin(request)
+        if request.method == "GET":
+            return api_success(list_ocr_keys())
+        payload = json.loads(request.body)
+        if not isinstance(payload, dict):
+            raise ValueError("请求体必须是 JSON 对象。")
+        return api_success(create_ocr_key(payload, int(user.id)))
+    except Exception as exc:
+        return _error(exc)
+
+
+@csrf_exempt
+@require_http_methods(["PATCH", "DELETE"])
+def ocr_key_detail_view(request: HttpRequest, key_id: str) -> JsonResponse:
+    try:
+        _ensure_admin(request)
+        if request.method == "DELETE":
+            delete_ocr_key(key_id)
+            return api_success({"deleted": True})
+        payload = json.loads(request.body)
+        if not isinstance(payload, dict):
+            raise ValueError("请求体必须是 JSON 对象。")
+        return api_success(update_ocr_key(key_id, payload))
     except Exception as exc:
         return _error(exc)
