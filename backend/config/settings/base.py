@@ -208,5 +208,10 @@ LOGGING = {
         }
     },
     "handlers": _log_handlers,
+    "loggers": {
+        # OCR 平台返回的对象存储地址带临时签名，不记录完整 HTTP 请求 URL。
+        "httpx": {"level": "WARNING", "propagate": True},
+        "httpcore": {"level": "WARNING", "propagate": True},
+    },
     "root": {"handlers": _root_handlers, "level": LOG_LEVEL},
 }
