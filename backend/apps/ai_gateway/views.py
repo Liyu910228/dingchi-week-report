@@ -28,6 +28,7 @@ async def chat_completion(request: HttpRequest) -> JsonResponse:
     认证/权限：需要有效 Bearer 登录凭证；幂等：否，禁止无幂等键自动重试。
     请求参数：JSON Body 的 messages 必须是非空数组，最多 50 条；每项 role 为 system/user/assistant，
       content 为非空字符串，单条最多 20,000 字符，总计最多 100,000 字符。
+      登录用户上下文由服务端注入，并启用只读数据查询工具（个人信息/我的月报/共享月报）。
     成功响应：200，统一 JSON 包络；data.content、data.model、data.request_id 为字符串或可空值，
       data.usage 为输入/输出/总 token 数对象。
     失败响应：400 INVALID_JSON/INVALID_REQUEST；401 AUTHENTICATION_FAILED；503 AI_NOT_CONFIGURED；
@@ -37,7 +38,9 @@ async def chat_completion(request: HttpRequest) -> JsonResponse:
       改变消息语义需升级 API 主版本。
     """
     try:
-        await sync_to_async(require_user, thread_sensitive=True)(request)
+        user, _role_code = await sync_to_async(require_user, thread_sensitive=True)(
+            request
+        )
     except AuthenticationError as exc:
         return api_error(exc.code, str(exc), status=401)
 
@@ -48,7 +51,7 @@ async def chat_completion(request: HttpRequest) -> JsonResponse:
 
     try:
         chat_request = ChatRequest.from_payload(payload)
-        result = await get_chat_service().complete(chat_request.messages)
+        result = await get_chat_service().complete(chat_request.messages, user=user)
     except ChatPayloadError as exc:
         return api_error("INVALID_REQUEST", str(exc), status=400)
     except AIProviderConfigurationError as exc:
