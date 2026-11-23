@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import base64
 import io
 import json
 import random
@@ -11,6 +12,7 @@ import uuid
 import zipfile
 from dataclasses import dataclass, field
 from typing import Any
+from urllib.parse import urlencode
 
 import httpx
 from asgiref.sync import sync_to_async
@@ -23,8 +25,14 @@ from ..models import AIOCRKey
 
 PADDLEOCR_JOBS_URL = "https://paddleocr.aistudio-app.com/api/v2/ocr/jobs"
 MINERU_API_ROOT = "https://mineru.net/api/v4"
+BAIDU_TOKEN_URL = "https://aip.baidubce.com/oauth/2.0/token"
+BAIDU_GENERAL_URL = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
+BAIDU_MAX_ENCODED_BYTES = 8 * 1024 * 1024
+BAIDU_MAX_PDF_PAGES = 40
 MAX_RESULT_BYTES = 50 * 1024 * 1024
 MAX_MARKDOWN_MEMBER_BYTES = 5 * 1024 * 1024
+_baidu_token_cache: dict[int, tuple[str, float]] = {}
+_baidu_token_lock = asyncio.Lock()
 
 
 class OCRError(RuntimeError):
@@ -52,7 +60,11 @@ class OCRKeyCandidate:
 
     @property
     def display_name(self) -> str:
-        provider = "PaddleOCR" if self.provider == AIOCRKey.PROVIDER_PADDLEOCR else "MinerU"
+        provider = {
+            AIOCRKey.PROVIDER_PADDLEOCR: "PaddleOCR",
+            AIOCRKey.PROVIDER_MINERU: "MinerU",
+            AIOCRKey.PROVIDER_BAIDU: "百度 OCR",
+        }.get(self.provider, self.provider)
         return f"{provider}（{self.label}）" if self.label else provider
 
 
@@ -324,6 +336,184 @@ async def _mineru(
     raise OCRProviderError("MinerU 等待识别结果超时。")
 
 
+def _baidu_credentials(candidate: OCRKeyCandidate) -> dict[str, str]:
+    try:
+        value = json.loads(candidate.api_key)
+        credentials = {
+            key: str(value.get(key) or "").strip()
+            for key in ("app_id", "api_key", "secret_key")
+        }
+    except (ValueError, TypeError, AttributeError) as exc:
+        raise OCRProviderError("百度 OCR 凭据格式不正确。") from exc
+    if not all(credentials.values()):
+        raise OCRProviderError("百度 OCR 的 AppID、API Key、Secret Key 必须完整配置。")
+    return credentials
+
+
+def _baidu_encoded_file(filename: str, content: bytes) -> tuple[str, str]:
+    field = "pdf_file" if filename.lower().endswith(".pdf") else "image"
+    encoded = ""
+    if field == "image":
+        try:
+            from PIL import Image, UnidentifiedImageError
+
+            with Image.open(io.BytesIO(content)) as image:
+                image.seek(0)
+                if image.width < 15 or image.height < 15:
+                    raise OCRProviderError("图片最短边不能小于 15 像素。")
+                if max(image.width, image.height) > 4096:
+                    image.thumbnail((4096, 4096), Image.Resampling.LANCZOS)
+                if image.mode not in {"RGB", "L"}:
+                    image = image.convert("RGB")
+                output = io.BytesIO()
+                image.save(output, format="PNG", optimize=True)
+                encoded = base64.b64encode(output.getvalue()).decode("ascii")
+                if len(urlencode({field: encoded}).encode("ascii")) > BAIDU_MAX_ENCODED_BYTES:
+                    output = io.BytesIO()
+                    image.save(output, format="JPEG", quality=90, optimize=True)
+                    encoded = base64.b64encode(output.getvalue()).decode("ascii")
+        except (UnidentifiedImageError, OSError) as exc:
+            raise OCRProviderError("图片无法解析，无法转换为百度 OCR 支持的格式。") from exc
+    if not encoded:
+        encoded = base64.b64encode(content).decode("ascii")
+    if len(urlencode({field: encoded}).encode("ascii")) > BAIDU_MAX_ENCODED_BYTES:
+        raise OCRProviderError("文件 Base64 编码后超过百度 OCR 的 8MB 限制，未发起调用。")
+    return field, encoded
+
+
+async def _baidu_access_token(
+    client: httpx.AsyncClient, candidate: OCRKeyCandidate, force_refresh: bool = False
+) -> str:
+    now = time.monotonic()
+    cached = _baidu_token_cache.get(candidate.id)
+    if not force_refresh and cached and cached[1] > now:
+        return cached[0]
+    async with _baidu_token_lock:
+        cached = _baidu_token_cache.get(candidate.id)
+        if not force_refresh and cached and cached[1] > time.monotonic():
+            return cached[0]
+        credentials = _baidu_credentials(candidate)
+        response = await _network(
+            client.get(
+                BAIDU_TOKEN_URL,
+                params={
+                    "grant_type": "client_credentials",
+                    "client_id": credentials["api_key"],
+                    "client_secret": credentials["secret_key"],
+                },
+            )
+        )
+        _raise_for_status(response)
+        try:
+            payload = response.json()
+        except ValueError as exc:
+            raise OCRProviderError("百度 OCR 认证接口返回格式不正确。") from exc
+        token = payload.get("access_token")
+        if not isinstance(token, str) or not token:
+            raise OCRProviderError("百度 OCR 认证失败，请检查 API Key 和 Secret Key。")
+        expires_in = int(payload.get("expires_in") or 2_592_000)
+        _baidu_token_cache[candidate.id] = (
+            token,
+            time.monotonic() + max(60, expires_in - 300),
+        )
+        return token
+
+
+def _baidu_error(payload: dict[str, Any]) -> None:
+    code = payload.get("error_code")
+    if code in {6, 14}:
+        raise OCRProviderError("百度 OCR 应用未开通对应接口权限。")
+    if code in {17, 18, 19}:
+        raise OCRProviderError("百度 OCR 免费额度或 QPS 已超限。")
+    if code == 336004:
+        raise OCRProviderError("文件大小不符合百度 OCR 限制。")
+    if code:
+        message = str(payload.get("error_msg") or "未知错误")[:180]
+        raise OCRProviderError(f"百度 OCR 识别失败（{code}）：{message}")
+
+
+async def _baidu_request(
+    client: httpx.AsyncClient,
+    candidate: OCRKeyCandidate,
+    field: str,
+    encoded: str,
+    page_number: int | None = None,
+    retry_auth: bool = True,
+) -> str:
+    token = await _baidu_access_token(client, candidate)
+    data = {
+        field: encoded,
+        "language_type": "CHN_ENG",
+        "detect_direction": "true",
+        "probability": "false",
+    }
+    if page_number is not None:
+        data["pdf_file_num"] = str(page_number)
+    response = await _network(
+        client.post(
+            BAIDU_GENERAL_URL,
+            params={"access_token": token},
+            data=data,
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+        )
+    )
+    _raise_for_status(response)
+    try:
+        payload = response.json()
+    except ValueError as exc:
+        raise OCRProviderError("百度 OCR 返回了无效 JSON。") from exc
+    if not isinstance(payload, dict):
+        raise OCRProviderError("百度 OCR 响应格式不正确。")
+    if payload.get("error_code") in {110, 111} and retry_auth:
+        await _baidu_access_token(client, candidate, force_refresh=True)
+        return await _baidu_request(
+            client, candidate, field, encoded, page_number, retry_auth=False
+        )
+    _baidu_error(payload)
+    rows = payload.get("words_result")
+    if not isinstance(rows, list):
+        raise OCRProviderError("百度 OCR 未返回识别文本。")
+    return "\n".join(
+        str(row.get("words") or "").strip()
+        for row in rows
+        if isinstance(row, dict) and str(row.get("words") or "").strip()
+    ).strip()
+
+
+async def _baidu_ocr(
+    client: httpx.AsyncClient,
+    candidate: OCRKeyCandidate,
+    filename: str,
+    content: bytes,
+    deadline: float,
+) -> str:
+    field, encoded = _baidu_encoded_file(filename, content)
+    if field == "image":
+        return await _baidu_request(client, candidate, field, encoded)
+    try:
+        from pypdf import PdfReader
+
+        reader = PdfReader(io.BytesIO(content))
+        if reader.is_encrypted:
+            raise OCRProviderError("加密 PDF 无法使用百度 OCR 识别。")
+        total_pages = len(reader.pages)
+    except OCRProviderError:
+        raise
+    except Exception as exc:
+        raise OCRProviderError("PDF 无法解析，无法使用百度 OCR。") from exc
+    if total_pages == 0:
+        raise OCRProviderError("PDF 没有可识别页面。")
+    pages = []
+    for page_number in range(1, min(total_pages, BAIDU_MAX_PDF_PAGES) + 1):
+        if time.monotonic() >= deadline:
+            raise OCRProviderError("百度 OCR 按页识别超时。")
+        text = await _baidu_request(client, candidate, field, encoded, page_number)
+        pages.append(f"--- 第 {page_number} 页 ---\n{text}" if total_pages > 1 else text)
+    if total_pages > BAIDU_MAX_PDF_PAGES:
+        pages.append(f"[PDF 共 {total_pages} 页，仅识别前 {BAIDU_MAX_PDF_PAGES} 页]")
+    return "\n\n".join(pages).strip()
+
+
 async def _run_provider(
     client: httpx.AsyncClient,
     candidate: OCRKeyCandidate,
@@ -333,7 +523,21 @@ async def _run_provider(
 ) -> str:
     if candidate.provider == AIOCRKey.PROVIDER_PADDLEOCR:
         return await _paddleocr(client, candidate, filename, content, deadline)
+    if candidate.provider == AIOCRKey.PROVIDER_BAIDU:
+        return await _baidu_ocr(client, candidate, filename, content, deadline)
     return await _mineru(client, candidate, filename, content, deadline)
+
+
+def _safe_candidate_error(candidate: OCRKeyCandidate, error: Exception) -> str:
+    message = str(error).replace(candidate.api_key, "***")
+    if candidate.provider == AIOCRKey.PROVIDER_BAIDU:
+        try:
+            credentials = _baidu_credentials(candidate)
+        except OCRProviderError:
+            credentials = {}
+        for secret in credentials.values():
+            message = message.replace(secret, "***")
+    return message[:300]
 
 
 async def extract_with_ocr(filename: str, content: bytes) -> OCRTextResult:
@@ -341,7 +545,7 @@ async def extract_with_ocr(filename: str, content: bytes) -> OCRTextResult:
 
     candidates = await sync_to_async(_enabled_candidates, thread_sensitive=True)()
     if not candidates:
-        raise OCRNotConfiguredError("尚未配置已启用的 PaddleOCR 或 MinerU API Key。")
+        raise OCRNotConfiguredError("尚未配置已启用的 PaddleOCR、MinerU 或百度 OCR API Key。")
     random.SystemRandom().shuffle(candidates)
     deadline = time.monotonic() + _poll_timeout()
     errors = []
@@ -358,7 +562,7 @@ async def extract_with_ocr(filename: str, content: bytes) -> OCRTextResult:
             if not text.strip():
                 raise OCRProviderError("识别结果为空，请换用更清晰的文件。")
         except OCRProviderError as exc:
-            message = str(exc).replace(candidate.api_key, "***")[:300]
+            message = _safe_candidate_error(candidate, exc)
             errors.append(f"{candidate.display_name}：{message}")
             await sync_to_async(_record_result, thread_sensitive=True)(candidate.id, False, message)
             continue

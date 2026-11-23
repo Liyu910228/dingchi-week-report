@@ -38,12 +38,13 @@ export interface ModelConfigurationTestResult {
   reply: string
 }
 
-export type OCRProvider = "paddleocr" | "mineru"
+export type OCRProvider = "paddleocr" | "mineru" | "baidu"
 
 export interface OCRKeyItem {
   id: string
   provider: OCRProvider
   label: string
+  app_id: string
   api_key_masked: string
   is_enabled: boolean
   last_used_at: string | null
@@ -57,5 +58,7 @@ export interface OCRKeyCreatePayload {
   provider: OCRProvider
   label: string
   api_key: string
+  app_id?: string
+  secret_key?: string
   is_enabled: boolean
 }

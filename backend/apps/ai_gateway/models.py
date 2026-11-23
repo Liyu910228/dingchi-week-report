@@ -33,9 +33,11 @@ class AIOCRKey(SnowflakeIdModel):
 
     PROVIDER_PADDLEOCR = "paddleocr"
     PROVIDER_MINERU = "mineru"
+    PROVIDER_BAIDU = "baidu"
     PROVIDER_CHOICES = (
         (PROVIDER_PADDLEOCR, "PaddleOCR"),
         (PROVIDER_MINERU, "MinerU"),
+        (PROVIDER_BAIDU, "百度 OCR"),
     )
 
     provider = models.CharField(max_length=16, choices=PROVIDER_CHOICES)
