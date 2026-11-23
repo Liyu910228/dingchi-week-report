@@ -148,7 +148,10 @@ DEFAULT_AUTO_FIELD = env("DEFAULT_AUTO_FIELD")
 AI_API_KEY = env("AI_API_KEY")
 AI_BASE_URL = env("AI_BASE_URL")
 AI_MODEL = env("AI_MODEL")
+AI_VISION_MODEL = env("AI_VISION_MODEL", default="qwen3-vl-plus")
 AI_TIMEOUT_SECONDS = env.float("AI_TIMEOUT_SECONDS")
+OCR_REQUEST_TIMEOUT_SECONDS = env.float("OCR_REQUEST_TIMEOUT_SECONDS", default=45)
+OCR_POLL_TIMEOUT_SECONDS = env.float("OCR_POLL_TIMEOUT_SECONDS", default=180)
 
 SNOWFLAKE_EPOCH_MS = env.int("SNOWFLAKE_EPOCH_MS")
 SNOWFLAKE_WORKER_ID = env.int("SNOWFLAKE_WORKER_ID")
@@ -205,5 +208,10 @@ LOGGING = {
         }
     },
     "handlers": _log_handlers,
+    "loggers": {
+        # OCR 平台返回的对象存储地址带临时签名，不记录完整 HTTP 请求 URL。
+        "httpx": {"level": "WARNING", "propagate": True},
+        "httpcore": {"level": "WARNING", "propagate": True},
+    },
     "root": {"handlers": _root_handlers, "level": LOG_LEVEL},
 }

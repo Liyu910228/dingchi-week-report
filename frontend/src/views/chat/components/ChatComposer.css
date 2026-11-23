@@ -1,11 +1,56 @@
 .composer {
   display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: end;
   gap: 0.8rem;
   padding: 1.25rem 1.5rem;
+  border: 2px dashed transparent;
   border-top: 1px solid var(--line);
   background: var(--surface-strong);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.composer.is-dragging {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface-strong));
+}
+
+.drop-zone-message {
+  padding: 0.75rem 1rem;
+  border: 1px dashed var(--accent);
+  border-radius: 10px;
+  color: var(--accent-dark);
+  background: color-mix(in srgb, var(--accent) 9%, var(--surface-strong));
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.composer-input-hint {
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-align: right;
+}
+
+.attachment-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.attachment-shortcuts .ghost-button {
+  min-height: 34px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8rem;
+}
+
+.attachment-shortcuts button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.composer-input {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.8rem;
 }
 
 .composer textarea {
@@ -30,5 +75,8 @@
   .composer {
     padding: 1rem;
   }
-}
 
+  .composer-input {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -136,3 +136,46 @@ ito.sales	        张销售
 innovation.sales	李销售
 
 functional.group    职能组
+## AI 助手与语义层（Auto-Ontology vendor 集成）
+
+后端内置两类数据查询能力，均通过 `/api/v1/ai/chat/` 的 function calling 提供：
+
+| 能力 | 模块 | 适用场景 |
+|------|------|----------|
+| 个人/团队数据工具（7 个中的 6 个） | `apps/ai_gateway/services/user_data_tools.py` | 我的信息、我的月报/周报、共享月报、团队月报/周报（领导） |
+| 语义层开放统计（`query_weekly_data`） | `apps/ontology/` + `backend/vendor/auto_ontology/` | 排名、分布、跨表统计等自由分析 |
+
+**权限原则：AI 的数据权限 = 当前登录用户本人的系统权限**（self 仅本人 / team 团队+本人 / all 全部）。
+语义层由 `apps/ontology/guard.py` 在 connector 层用 sqlglot 改写 SQL 实现行级隔离：
+员工维度表在表读取层注入 `employee_id IN (可见范围)`，仅允许单条 SELECT、禁写、自动 LIMIT。
+
+### 部署语义层（可选，不部署则仅 query_weekly_data 不可用）
+
+1. 启动 postgres+pgvector 容器并准备语义元数据库（库名 `auto_ontology`，含术语/列属性向量表）。
+2. 在 `backend/.env.*` 配置 `ONTOLOGY_PG_*`（见 `.env.example` 第 12 节）；
+   LLM/Embedding 复用 `AI_API_KEY`/`AI_BASE_URL`/`AI_MODEL`，由 `apps/ontology/services.py` 自动映射。
+3. 追加安装语义层依赖（注意：会把 openai 固定到 2.54.0，为实测兼容组合）：
+
+   ```bash
+   uv pip install --python .venv/bin/python -r requirements-ontology.txt
+   ```
+
+4. 语义元数据初始化：使用 NVIDIA Auto-Ontology 官方服务对业务 MySQL 做 ingestion + 语义编译，
+   完成后即可停掉官方服务，Django 进程独立使用编译结果。
+
+### 管理员模型配置
+
+系统管理员可在「系统设置 → 模型配置」维护主模型、视觉模型、Base URL 和 API Key，
+并在保存前直接测试当前表单中的模型连通性。配置保存在 `ai_model_config` 表并即时生效，
+无需重启；环境变量仅作为首次配置前的初始值。API Key 使用系统 RSA 字段加密存储，接口只返回掩码。
+视觉模型用于先把图片整理为文字笔记，再交给主模型生成内容；当前千问服务实测使用 `qwen3-vl-plus`。
+
+### AI 助手图片与文件写作
+
+AI 助手支持每条消息最多 4 个附件、单文件最大 10MB：
+PNG/JPEG/WebP/GIF、PDF、DOCX、XLSX、TXT、MD、CSV、JSON。
+上传接口为 `POST /api/v1/ai/attachments/`，聊天消息的 `attachment_ids` 引用附件；
+历史消息保留引用后可继续追问。附件只存放在私有媒体目录并校验上传者所有权，不提供公开文件 URL。
+
+可根据附件直接生成周报或月度计划草稿。附件内容仅作为写作素材，缺失日期、负责人或交付物应标为待确认；
+生成结果不会自动保存或提交到周报/月报业务表。

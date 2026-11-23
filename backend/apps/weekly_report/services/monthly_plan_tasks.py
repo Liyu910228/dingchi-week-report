@@ -44,10 +44,13 @@ def list_monthly_plan_tasks(
         }
         for row in rows
     ]
-    return restore_metadata(
+    items = restore_metadata(
         items,
         dao.latest_task_snapshot(employee_id=employee_id, role_code=role_code, month_key=month_key),
     )
+    from .monthly_task_live_progress import overlay_live_progress
+
+    return overlay_live_progress(items)
 
 
 def validate_tasks(

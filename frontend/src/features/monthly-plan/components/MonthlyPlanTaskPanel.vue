@@ -30,6 +30,8 @@ import TemplateTaskCell from "@/features/weekly-report/components/TemplateTaskCe
 import { previewTaskTemplate } from "@/features/weekly-report/task-texts"
 import type { TaskTemplateOption, EditableTask } from "@/features/weekly-report/task-editing"
 import TaskTextFieldDialog from "@/features/weekly-report/components/TaskTextFieldDialog.vue"
+import { updateMonthlyTaskProgress } from "../api"
+import { getErrorMessage } from "@/shared/api/errors"
 const MonthlyPlanTaskDialog = defineAsyncComponent(() => import("./MonthlyPlanTaskDialog.vue"))
 const props = defineProps<{
   templates?: readonly TaskTemplateOption[]
@@ -37,6 +39,7 @@ const props = defineProps<{
   monthKey: string
   templateCode?: string
   readonly?: boolean
+  progressEditable?: boolean
   disabled?: boolean
   isLoading?: boolean
   errorMessage?: string
@@ -91,7 +94,28 @@ function patchTemplate(id: string, value: Partial<EditableTask>) {
 }
 const scopeLabel = computed(() => monthlyPlanScopeLabel(props.templateCode || ""))
 const sampleFields = computed(() => monthlyPlanSampleFields(props.templateCode || ""))
-const unavailable = computed(() => props.disabled || props.isLoading || Boolean(props.errorMessage))
+const unavailable = computed(() => props.disabled || props.isLoading || Boolean(props.errorMessage) || progressBusy.value)
+const progressBusy = ref(false)
+const progressError = ref("")
+const progressSaved = ref(false)
+const liveProgressFields = new Set(["progress_text", "progress_percent", "quality_percent", "completion_rate", "delay_reason", "on_time_status", "actual_completion_date", "owner_id", "owner_name", "collaborator_names", "document_links"])
+async function saveLiveProgress(id: string, fields: Partial<MonthlyPlanTask>) {
+  const current = props.tasks.find(task => task.id === id)
+  if (!current || !/^\d+$/.test(id) || Object.keys(fields).some(field => !liveProgressFields.has(field))) return
+  progressBusy.value = true
+  progressError.value = ""
+  progressSaved.value = false
+  try {
+    const result = await updateMonthlyTaskProgress(id, { ...fields, revision: current.progress_revision || 0 })
+    const updated = { ...current, ...result.values, progress_revision: result.revision, progress_updated_at: result.updated_at || null, progress_updated_by: result.updated_by || null, progress_updated_by_name: result.updated_by_name || "" }
+    emit("update:tasks", props.tasks.map(task => task.id === id ? updated : task))
+    progressSaved.value = true
+  } catch (cause) {
+    progressError.value = getErrorMessage(cause)
+  } finally {
+    progressBusy.value = false
+  }
+}
 watch([planTasks, unavailable], ([tasks, blocked]) => {
   if (!props.readonly && !blocked && tasks.some((task, index) => task !== props.tasks[index])) emit("update:tasks", tasks)
 }, { immediate: true })
@@ -118,9 +142,13 @@ function remove(id: string) {
   if (!unavailable.value && !props.readonly) emit("update:tasks", props.tasks.filter((task) => task.id !== id))
 }
 function patch(id: string, fields: Partial<MonthlyPlanTask>) {
-  if (unavailable.value || props.readonly) return
+  if (unavailable.value || (props.readonly && !props.progressEditable)) return
   const current = planTasks.value.find(task => task.id === id)
   if (current && ("progress_percent" in fields || "quality_percent" in fields)) fields.completion_rate = Math.round((Number(fields.progress_percent ?? current.progress_percent ?? 0) + Number(fields.quality_percent ?? current.quality_percent ?? 0)) / 2)
+  if (props.readonly) {
+    void saveLiveProgress(id, fields)
+    return
+  }
   emit("update:tasks", patchMonthlyTasks(planTasks.value, id, fields))
 }
 function saveText(value: string, templateIndex?: number) {
@@ -191,6 +219,7 @@ function addPlans(customer: string, indexes: number[]) {
       <ScrollableTabs v-if="!customerScope?.enabled.value && deliveryTemplate && customers.length" v-model="activeCustomer" :items="customers" class="monthly-customer-tabs" />
     </template>
     <template #actions>
+      <span v-if="readonly && progressEditable" class="live-progress-hint">右侧为实时进度，保存后无需重新审批</span>
       <button v-if="dynamicTemplate" class="ghost-button" type="button" @click="columnsOpen = true">选择展示字段</button>
       <template v-if="!readonly">
         <ExamplePreviewButton content="" :fields="sampleFields" panel-title="月度计划填写样例" />
@@ -203,6 +232,9 @@ function addPlans(customer: string, indexes: number[]) {
       <button class="ghost-button" type="button" :disabled="disabled" @click="emit('retry')">重试</button>
     </div>
     <template v-else>
+      <p v-if="progressBusy" class="live-progress-message" aria-live="polite">正在保存实时进度…</p>
+      <p v-else-if="progressError" class="live-progress-message error" role="alert">{{ progressError }}</p>
+      <p v-else-if="progressSaved" class="live-progress-message success" aria-live="polite">实时进度已保存，计划基线和审批状态未改变。</p>
       <p v-if="dynamicTemplate && fieldError" role="alert">{{ fieldError }} <button type="button" class="ghost-button" @click="reloadFields">重试</button></p>
       <div class="monthly-task-table-wrap">
         <table v-row-backgrounds v-resizable-columns="resizeKey" class="monthly-task-table" :class="{ 'delivery-table': editableTemplate, 'delivery-monthly-table': deliveryTemplate }" :style="dynamicTemplate ? { minWidth: `${600 + selectedFields.length * 210}px` } : undefined">
@@ -227,8 +259,8 @@ function addPlans(customer: string, indexes: number[]) {
                 <button v-else class="monthly-task-text-cell user-content" type="button" @click="openText(task, 'work_content')">{{ task.work_content || "点击填写工作内容" }}</button>
                 <button data-task-tip="新增输出成果" aria-label="新增输出成果" v-if="!readonly && !unavailable" class="cell-insert" type="button" @click="insertChild(task.id, 'content')"><Plus :size="16" /></button>
               </td>
-              <MonthlyPlanTaskCells v-if="dynamicTemplate" :task="task" :fields="selectedFields" :users="users" :readonly="readonly || unavailable" :content-span="monthlyRowSpan(entries, index, 'content')" @patch="patch(task.id, $event)" @insert-content="insertChild(task.id, 'content')" />
-              <td v-if="dynamicTemplate">{{ formatDateTime(task.updated_at) }}</td>
+              <MonthlyPlanTaskCells v-if="dynamicTemplate" :task="task" :fields="selectedFields" :users="users" :readonly="readonly || unavailable" :progress-editable="Boolean(progressEditable) && !unavailable" :content-span="monthlyRowSpan(entries, index, 'content')" @patch="patch(task.id, $event)" @insert-content="insertChild(task.id, 'content')" />
+              <td v-if="dynamicTemplate">{{ formatDateTime(task.progress_updated_at || task.updated_at) }}</td>
               <MonthlyPlanOutcomeCells v-else :task="task" :readonly="readonly || unavailable" @patch="patch(task.id, $event)" />
               <td v-if="!readonly" class="actions">
                 <button v-if="!editableTemplate" class="link-button" type="button" :disabled="unavailable" @click="open(task, true)">查看</button>

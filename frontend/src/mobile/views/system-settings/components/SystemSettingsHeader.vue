@@ -9,6 +9,9 @@ import { RouterLink } from "vue-router"
       <RouterLink :to="{ name: 'mobile-system-settings-customers' }" active-class="is-active">
         客户管理
       </RouterLink>
+      <RouterLink :to="{ name: 'mobile-system-settings-models' }" active-class="is-active">
+        模型配置
+      </RouterLink>
     </nav>
   </section>
 </template>

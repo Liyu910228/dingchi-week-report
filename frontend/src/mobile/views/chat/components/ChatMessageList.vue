@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { nextTick, useTemplateRef, watch } from "vue"
 
+import ChatAttachmentChips from "@/features/chat/components/ChatAttachmentChips.vue"
 import type { ChatEntry } from "@/mobile/features/chat/types"
 
 const props = defineProps<{
@@ -33,7 +34,10 @@ watch(
       :class="'message-' + message.role"
     >
       <span>{{ message.role === "user" ? "你" : "AI" }}</span>
-      <p>{{ message.content }}</p>
+      <div class="message-body">
+        <ChatAttachmentChips :attachments="message.attachments" />
+        <p>{{ message.content }}</p>
+      </div>
     </article>
 
     <article v-if="isSending" class="message message-assistant pending-message">

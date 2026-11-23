@@ -15,6 +15,10 @@ export interface MonthlyTaskProgress {
   collaborator_names?: string
   attachments?: TaskAttachment[]
   document_links?: string
+  progress_revision?: number
+  progress_updated_at?: string | null
+  progress_updated_by?: string | null
+  progress_updated_by_name?: string
 }
 
 /** 按员工、角色、月份共用的月度计划明细。ID 为字符串，排序按数组顺序。 */

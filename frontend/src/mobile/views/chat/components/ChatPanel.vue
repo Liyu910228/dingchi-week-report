@@ -11,12 +11,12 @@ import ChatToolbar from "./ChatToolbar.vue"
 const chatStore = useChatStore()
 const prompt = ref("")
 
-async function submit() {
+async function submit(files: File[]) {
   const content = prompt.value
-  if (!content.trim()) return
+  if (!content.trim() && !files.length) return
 
   prompt.value = ""
-  await chatStore.send(content)
+  await chatStore.send(content, files)
 }
 </script>
 

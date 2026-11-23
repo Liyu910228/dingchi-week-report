@@ -98,6 +98,12 @@ const routes: RouteRecordRaw[] = [
         component: () => import("@/views/system-settings/CustomerManagementView.vue"),
         meta: { title: "系统设置 - 客户管理" },
       },
+      {
+        path: "models",
+        name: "system-settings-models",
+        component: () => import("@/views/system-settings/ModelConfigurationView.vue"),
+        meta: { title: "系统设置 - 模型配置" },
+      },
     ],
   },
   {

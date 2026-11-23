@@ -178,6 +178,42 @@ class MonthlyPlanTask(SnowflakeIdModel):
         ordering = ["sort_order", "id"]
 
 
+class MonthlyPlanTaskProgress(SnowflakeIdModel):
+    """提交后仍可维护的执行进度；计划基线与审批快照保持不变。"""
+
+    task_id = models.BigIntegerField(unique=True)
+    data_json = models.TextField(blank=True, default="{}")
+    revision = models.PositiveIntegerField(default=0)
+    updated_by = models.BigIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "monthly_plan_task_progress"
+        ordering = ["-updated_at", "-id"]
+
+
+class MonthlyPlanTaskProgressHistory(SnowflakeIdModel):
+    """实时进度每次有效变更的完整前后值，独立于计划审批版本。"""
+
+    task_id = models.BigIntegerField(db_index=True)
+    revision = models.PositiveIntegerField()
+    changed_by = models.BigIntegerField()
+    before_json = models.TextField(blank=True, default="{}")
+    after_json = models.TextField(blank=True, default="{}")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "monthly_plan_task_progress_history"
+        ordering = ["-created_at", "-id"]
+        indexes = [
+            models.Index(fields=["task_id", "created_at"], name="idx_mptph_task_time"),
+        ]
+        constraints = [
+            models.UniqueConstraint(fields=["task_id", "revision"], name="uq_mptph_task_revision"),
+        ]
+
+
 class WeeklyTaskText(SnowflakeIdModel):
     """周报内共享的长文本；逻辑关联，不创建数据库外键。"""
 
