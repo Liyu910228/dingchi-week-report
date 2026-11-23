@@ -2,7 +2,7 @@ from django.urls import path
 
 from . import monthly_plan_management_views as monthly_views
 from . import submission_views, views
-from .monthly_plan_task_views import monthly_plan_task_list_view
+from .monthly_plan_task_views import monthly_plan_task_list_view, monthly_plan_task_progress_view
 
 app_name = "weekly_report"
 
@@ -92,6 +92,11 @@ urlpatterns = [
     path("dashboard/next-week/", views.dashboard_next_week_view, name="dashboard-next-week"),
     path("weekly-report-templates/<str:template_code>/", views.template_view, name="template"),
     path("monthly-plans/<str:month_key>/", views.monthly_plan_view, name="monthly-plan"),
+    path(
+        "monthly-plan-tasks/<str:task_id>/progress/",
+        monthly_plan_task_progress_view,
+        name="monthly-plan-task-progress",
+    ),
     path(
         "monthly-plan-tasks/<str:month_key>/",
         monthly_plan_task_list_view,

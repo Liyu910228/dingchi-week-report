@@ -134,14 +134,18 @@ def _list_history(items, profiles, user_id, role_code):
 
 def detail(user, role_code, plan_id):
     plan = readable_plan(user, role_code, plan_id)
+    tasks = list_monthly_plan_tasks(
+        employee_id=plan.employee_id, role_code=plan.role_code, month_key=plan.month_key
+    )
+    from ..monthly_task_live_progress import progress_history
+
     return {
         "plan": {
             **serialize_plan(plan, user.id, role_code=role_code),
             "role_name": account_role_name(plan.role_code),
         },
-        "tasks": list_monthly_plan_tasks(
-            employee_id=plan.employee_id, role_code=plan.role_code, month_key=plan.month_key
-        ),
+        "tasks": tasks,
+        "progress_history": progress_history([int(task["id"]) for task in tasks]),
         "approvals": approval_history("monthly_plan", int(plan.id), user.id, role_code),
         "history": approved_versions(plan, user.id),
         "can_edit": int(plan.employee_id) == int(user.id)

@@ -225,9 +225,23 @@ def detail(user, role_code, submission_id):
     if parent.legacy and parent.kind == "monthly":
         rows = dao.part_rows(parent)
         records = approval_history("monthly_plan", rows[0].id, user.id, role_code) if rows else []
+    detail_rows = detail_parts(parent, user, role_code)
+    from .monthly_task_live_progress import progress_history
+
+    task_ids = [
+        int(task["id"])
+        for part in detail_rows
+        for task in (
+            part.get("payload", {}).get("tasks", [])
+            if parent.kind == "monthly"
+            else (part.get("monthly_plan") or {}).get("tasks", [])
+        )
+        if str(task.get("id", "")).isdigit()
+    ]
     return {
         "plan": serialize(parent, user, role_code),
-        "parts": detail_parts(parent, user, role_code),
+        "parts": detail_rows,
+        "progress_history": progress_history(task_ids),
         "approvals": records,
         "history": versions(parent, user.id, role_code),
         "managers": approval_managers(parent.employee_id)

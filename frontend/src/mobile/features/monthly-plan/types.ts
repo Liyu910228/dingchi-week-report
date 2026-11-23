@@ -54,7 +54,8 @@ export interface PlanHistory {
 export interface ApprovedPlanVersion extends ApprovalRecord { version: number; process_type: "initial" | "change" }
 export interface PlanChange { role_summaries?: RoleGoalSummary[]; id:string; plan_id:string; status:string; revision:number; base_revision:number; summary:string; rejection_reason:string; created_at:string; updated_at:string }
 export interface ChangeDetail { plan:ManagedMonthlyPlan; change:PlanChange; base_snapshot:PlanSnapshot; snapshot:PlanSnapshot; approvals:ApprovalRecord[]; can_edit:boolean }
-export interface PlanDetail { plan: ManagedMonthlyPlan; tasks: MonthlyPlanTask[]; approvals: ApprovalRecord[]; history: ApprovedPlanVersion[]; can_edit: boolean; can_create_change?:boolean }
+export interface PlanDetail { plan: ManagedMonthlyPlan; tasks: MonthlyPlanTask[]; approvals: ApprovalRecord[]; history: ApprovedPlanVersion[]; progress_history?: TaskProgressHistoryEntry[]; can_edit: boolean; can_create_change?:boolean }
+export interface TaskProgressHistoryEntry { id:string;task_id:string;task_name:string;revision:number;changed_by:string;changed_by_name:string;created_at:string;before:Record<string,unknown>;after:Record<string,unknown>;changes:{field:string;label:string;before:unknown;after:unknown}[] }
 export interface PlanContext { template_code: string; can_create: boolean; warning: string; managers: {id: string; name: string}[]; pending_approval_count?:number; has_approval_tasks?: boolean }
 export interface PlanInput { month_key: string; summary: string; tasks: MonthlyPlanTask[]; revision?: number }
 export type PlanListView = "mine" | "members" | "approvals" | "shared"

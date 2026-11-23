@@ -1,3 +1,8 @@
+.live-progress-hint { color: var(--accent-dark); font-size: 0.875rem; }
+.live-progress-message { margin: 0 0 12px; padding: 10px 12px; border-radius: 8px; color: var(--accent-dark); background: var(--surface-soft); }
+.live-progress-message.error { color: var(--red); }
+.live-progress-message.success { color: var(--green, #237804); }
+
 .monthly-task-panel { min-width: 0; padding: 22px; }
 .monthly-task-header,
 .monthly-task-heading,

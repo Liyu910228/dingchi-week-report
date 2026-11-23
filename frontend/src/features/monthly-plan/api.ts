@@ -38,6 +38,10 @@ export function decideManagedPlan(id: string, action: "approve" | "reject", reas
 /** 检查本人当前角色指定月份已审批计划：GET gate/{YYYY-MM}/；返回approved/message和只读内容；用于周报加载及周期切换，400/401，trace统一。 */
 export function getMonthlyPlanGate(month: string): Promise<PlanGate> { return request({ method: "GET", url: base + "gate/" + encodeURIComponent(month) + "/" }) }
 
+export interface MonthlyTaskProgressUpdate {task_id:string;revision:number;values:Partial<import("@/features/weekly-report/monthly-plan/types").MonthlyPlanTask>;updated_at?:string;updated_by?:string;updated_by_name?:string}
+/** 独立保存右侧执行进度；revision为该任务进度版本，不是计划版本。 */
+export function updateMonthlyTaskProgress(taskId:string,input:Partial<import("@/features/weekly-report/monthly-plan/types").MonthlyPlanTask> & {revision:number}):Promise<MonthlyTaskProgressUpdate>{return request({method:"PATCH",url:"/v1/monthly-plan-tasks/"+taskId+"/progress/",data:input})}
+
 /** 显式创建已通过计划的变更草稿（兼容接口，不用于打开变更页面）：POST {id}/changes/，无请求体；锁定基准版本，有未完成申请返回400；Bearer、trace，返回独立申请及原始/拟变更快照，不修改生效数据。 */
 export function createPlanChange(id:string):Promise<SubmissionChange> { return request({method:"POST",url:root+id+"/changes/"}) }
 /** GET changes/{id}/：查看获授权的变更快照、不可变原始快照和审批记录；字符串ID；401/403/404，统一trace。 */
