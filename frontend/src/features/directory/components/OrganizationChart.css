@@ -1,0 +1,28 @@
+.organization-chart {
+  min-width: 0;
+  overflow: auto;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background:
+    linear-gradient(rgba(231, 241, 253, 0.42) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(231, 241, 253, 0.42) 1px, transparent 1px),
+    #fbfdff;
+  background-size: 24px 24px;
+  scrollbar-color: #a9c8ed transparent;
+  scrollbar-width: thin;
+}
+
+.organization-chart__canvas {
+  display: flex;
+  width: max-content;
+  min-width: 100%;
+  justify-content: center;
+}
+
+.organization-chart__empty {
+  display: grid;
+  min-height: 180px;
+  place-items: center;
+  color: var(--muted);
+}

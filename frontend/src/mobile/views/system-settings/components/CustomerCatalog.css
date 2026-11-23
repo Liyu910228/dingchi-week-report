@@ -1,0 +1,16 @@
+.customer-catalog {min-width:0;}
+.customer-cards {display:grid;gap:14px;}
+.customer-card {min-width:0;padding:16px 14px 8px;border:1px solid #9fbce0;border-radius:14px;background:linear-gradient(180deg,#e2edfc 0%,#f2f7fe 42%,#fff 100%);box-shadow:0 3px 10px rgba(45,84,135,.08);}
+.customer-card-heading {display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.customer-card-heading h3 {min-width:0;margin:0;color:var(--text-strong);font-size:16px;font-weight:500;line-height:1.5;overflow-wrap:anywhere;}
+.customer-status {flex-shrink:0;display:inline-flex;padding:3px 9px;border-radius:999px;background:#e6ebf2;color:#687c96;font-size:12px;line-height:1.5;}
+.customer-status.is-active {background:#dbf3e9;color:#087c64;}
+.customer-fields {display:grid;gap:10px;margin:14px 0;}
+.customer-fields > div {display:grid;grid-template-columns:72px minmax(0,1fr);align-items:baseline;gap:10px;}
+.customer-fields dt {color:var(--muted);font-size:13px;}
+.customer-fields dd {min-width:0;margin:0;color:var(--text);font-size:14px;line-height:1.6;overflow-wrap:anywhere;}
+.customer-actions {display:flex;justify-content:flex-end;align-items:center;gap:10px;padding-top:6px;border-top:1px solid #c8d9ed;}
+.customer-actions button {display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:8px 4px;border:0;background:transparent;color:var(--accent-dark);font:inherit;font-size:14px;line-height:1.65;cursor:pointer;}
+.customer-actions .is-danger {color:var(--red);}
+.customer-actions button:focus-visible {outline:2px solid var(--accent);outline-offset:2px;border-radius:4px;}
+.empty-card {margin:0;padding:24px 12px;text-align:center;color:var(--muted);font-size:14px;}

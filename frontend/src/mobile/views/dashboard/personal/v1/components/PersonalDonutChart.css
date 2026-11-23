@@ -1,0 +1,12 @@
+.personal-donut-chart,
+.personal-donut-empty {
+  width: 152px;
+  height: 152px;
+}
+
+.personal-donut-empty {
+  display: grid;
+  place-items: center;
+  color: #91a5c1;
+  font-size: 12px;
+}

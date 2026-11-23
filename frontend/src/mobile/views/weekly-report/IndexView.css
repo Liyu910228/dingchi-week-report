@@ -1,0 +1,8 @@
+.weekly-workspace {display:grid;gap:0;min-width:0;padding:1.25rem 1.3rem;}
+.weekly-workspace-tabs {display:flex;align-items:center;justify-content:space-between;gap:16px;min-width:0;padding:0;border-bottom:0;}
+.weekly-workspace-tabs :deep(.scrollable-tabs) {border-bottom:0;}
+.weekly-workspace :deep(.report-list-card),.weekly-workspace :deep(.shared-report-card) {margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;}
+.weekly-list-create-action {flex:0 0 auto;align-self:center;margin-bottom:8px;}
+.weekly-list-create-action:empty {display:none;}
+.weekly-list-create-action :deep(.primary-button) {white-space:nowrap;}
+@media(max-width:560px) {.weekly-workspace {padding:16px;}.weekly-workspace-tabs {gap:8px;}.weekly-list-create-action :deep(.primary-button) {min-height:40px;padding:8px 12px;font-size:14px;}}

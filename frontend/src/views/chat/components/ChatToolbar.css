@@ -1,0 +1,38 @@
+.chat-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem 1.75rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.chat-toolbar h2 {
+  margin: 0.35rem 0 0;
+  font-size: 1.25rem;
+}
+
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.model-tag {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+@media (max-width: 540px) {
+  .chat-toolbar {
+    padding: 1rem;
+  }
+
+  .toolbar-actions .model-tag {
+    display: none;
+  }
+}
+

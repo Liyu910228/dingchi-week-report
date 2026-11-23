@@ -1,0 +1,6 @@
+interface:
+  display_name: "前后端 API 对接规范"
+  short_description: "按中文契约、JSON 数据和版本规则联调前后端"
+  default_prompt: "使用 $frontend-backend-api-conventions 定义或审查这个前后端 API 契约。"
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,26 @@
+.submission-form,.submission-template{display:grid;gap:20px;min-width:0}.submission-layout{display:grid;gap:20px;min-width:0;align-items:start}.submission-layout--monthly{grid-template-columns:minmax(0,1fr)}.submission-positions{display:grid;gap:20px;min-width:0;align-content:start}.submission-actions{display:flex;gap:10px}.submission-period{display:flex;gap:24px;align-items:center;flex-wrap:wrap}.submission-period label{display:grid;gap:10px}.submission-period input{min-width:230px}.submission-template[style*="display: none"]{display:none!important}@media(max-width:1100px){.submission-layout--monthly{grid-template-columns:minmax(0,1fr)}}
+.submission-period{padding:22px}.submission-period label{font-weight:600;color:var(--text-strong)}.submission-period input{box-sizing:border-box;min-height:46px;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--surface-soft);font:inherit;color:var(--text)}.submission-period :deep(.week-period-picker){display:flex;align-items:center;min-height:46px;padding:0 13px;border:1px solid var(--line);border-radius:10px;background:var(--surface-soft);gap:12px;max-width:100%;box-sizing:border-box}
+
+
+.submission-month .required { color: var(--red); }
+.submission-period .submission-month input { font-weight: 400; color: var(--text); }
+
+
+
+.submission-period--weekly {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;}
+.submission-period--weekly > label {min-width:0;}
+.submission-period--weekly > label > input {width:100%;min-width:0;max-width:100%;font-weight:400;}
+.submission-period--weekly :deep(.week-period-picker) {width:100%;min-width:0;}
+.submission-period--weekly :deep(.period-calendar) {margin-left:auto;}
+.submission-period-meta {grid-column:1/-1;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px 20px;color:var(--muted);font-size:0.85rem;}
+@media(max-width:640px) {.submission-period--weekly {grid-template-columns:minmax(0,1fr);gap:16px;}.submission-period-meta {justify-content:flex-start;}}
+
+.submission-form,.submission-template,.submission-layout,.submission-positions {gap:var(--panel-stack-gap);}
+
+
+.submission-position-workspace {min-width:0;padding:0;}
+.submission-position-tabs {min-width:0;margin:0 20px;padding:10px 0 0;border-bottom:1px solid var(--line);}
+.submission-position-workspace .submission-template {gap:0;}
+.submission-position-workspace :deep(.dashboard-card:not(.fullscreen-panel--expanded)) {margin:0;border:0;border-top:1px solid var(--line);border-radius:0;background:transparent;box-shadow:none;}
+.submission-position-workspace :deep(.goal-card) {border-top:0!important;}
+@media(max-width:640px) {.submission-position-tabs {margin-inline:14px;}}

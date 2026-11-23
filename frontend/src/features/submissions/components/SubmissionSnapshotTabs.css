@@ -1,0 +1,4 @@
+.snapshot-tabs,.snapshot-pane,.snapshot-complete {display:grid;gap:18px;min-width:0;}
+.snapshot-expand-action {display:flex;justify-content:center;padding:16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface-soft);}
+.snapshot-complete--expanded {padding:16px;border:1px solid var(--line);border-radius:12px;}
+.snapshot-complete h3 {margin:0;padding-bottom:14px;border-bottom:1px solid var(--line);color:var(--text-strong);font-size:1rem;}

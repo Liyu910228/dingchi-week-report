@@ -1,0 +1,300 @@
+.report-task-table {
+  min-width: 0;
+}
+
+.report-task-table__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-bottom: 0.8rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.report-task-table-wrap {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 1px solid #d8e6f7;
+  border-radius: 12px;
+  overscroll-behavior-x: contain;
+}
+
+.report-task-table__grid {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+.report-task-table__grid th,
+.report-task-table__grid td {
+  padding: 0.78rem 0.55rem;
+  border-right: 1px solid #d6e3f2;
+  border-bottom: 1px solid #d6e3f2;
+  vertical-align: middle;
+}
+
+.report-task-table__grid th {
+  color: #58749c;
+  background: #eef5ff;
+  font-size: 0.78rem;
+  font-weight: 750;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.report-task-table__grid td {
+  color: var(--text);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.report-task-table__grid tr:last-child td {
+  border-bottom: 0;
+}
+
+.report-task-table__grid th:last-child,
+.report-task-table__grid td:last-child {
+  border-right: 0;
+}
+
+/* 与填写页保持一致：核心识别列和结果列固定，只有动态字段区域横向滚动。 */
+.report-task-table__grid .fixed-col {
+  position: sticky;
+  z-index: 2;
+  background: #fff;
+}
+
+.report-task-table__grid thead .fixed-col {
+  z-index: 4;
+  background: #eef5ff;
+}
+
+.serial-col {
+  left: 0;
+  width: 56px;
+  min-width: 56px;
+  max-width: 56px;
+}
+
+.report-task-table__grid th.serial-col {
+  text-align: center;
+}
+
+.customer-col {
+  left: 56px;
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
+}
+
+.task-col {
+  left: 206px;
+  width: 220px;
+  min-width: 220px;
+  max-width: 220px;
+  box-shadow: 2px 0 0 #c4d8ee;
+}
+
+.task-col--without-primary {
+  left: 56px;
+}
+
+.dynamic-col {
+  width: 180px;
+  min-width: 180px;
+  max-width: 180px;
+}
+
+/* 长字段标题（例如月度工作完成率的计算说明）需要在列内完整换行，
+   避免被右侧固定列覆盖或截断。 */
+.report-task-table__grid th.dynamic-col {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+  line-height: 1.35;
+}
+
+.status-col {
+  right: 174px;
+  width: 112px;
+  min-width: 112px;
+  max-width: 112px;
+  white-space: nowrap;
+  box-shadow: -2px 0 0 #c4d8ee;
+}
+
+.report-task-table__grid th.status-col {
+  text-align: center;
+}
+
+.updated-col {
+  right: 0;
+  width: 174px;
+  min-width: 174px;
+  max-width: 174px;
+  white-space: nowrap;
+}
+
+.customer-cell {
+  color: var(--text-strong) !important;
+  font-weight: 750;
+}
+
+.task-cell {
+  overflow: hidden;
+}
+
+.task-link {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  color: #2778e8;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.task-link:hover {
+  color: #155bb8;
+  text-decoration: underline;
+}
+
+.cell-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.date-cell {
+  color: var(--muted) !important;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 4.3rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+.status-pill--in_progress {
+  color: #216aca;
+  background: #e1efff;
+}
+
+.status-pill--pending {
+  color: #216aca;
+  background: #e1efff;
+}
+
+.status-pill--on_time {
+  color: #07855c;
+  background: #dff8ee;
+}
+
+.status-pill--completed {
+  color: #07855c;
+  background: #dff8ee;
+}
+
+.status-pill--overdue,
+.status-pill--late {
+  color: #c44343;
+  background: #ffe2e2;
+}
+
+.status-pill--not_applicable,
+.status-pill--unknown {
+  color: #74839a;
+  background: #edf1f6;
+}
+
+.empty-cell {
+  padding: 2rem !important;
+  color: var(--muted) !important;
+  text-align: center !important;
+}
+
+.column-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem 1rem;
+}
+
+.column-options label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  min-width: 0;
+  color: var(--text);
+  line-height: 1.45;
+}
+
+.column-options label span {
+  overflow-wrap: anywhere;
+}
+
+.column-options__empty {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--muted);
+}
+
+@media (max-width: 720px) {
+  .column-options {
+    grid-template-columns: 1fr;
+  }
+}
+.report-task-table--delivery .customer-tabs {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+.customer-tabs button {
+  flex-shrink: 0;
+  padding: 0.65rem 0.25rem;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+}
+.customer-tabs button.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  font-weight: 700;
+}
+.report-task-table--delivery .task-col,
+.report-task-table--delivery .multiline-col {
+  width: 320px;
+  min-width: 320px;
+  max-width: 320px;
+}
+.report-task-table--delivery .report-task-table__grid td { vertical-align: top; }
+.report-task-table--delivery .cell-text {
+  overflow: visible;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.7;
+  text-align: left;
+}
+.report-task-table--delivery .task-cell { overflow: visible; }
+.report-task-table--delivery .attachment-link { margin-top: 0.5rem; text-align: left; }

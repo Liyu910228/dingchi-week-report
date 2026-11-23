@@ -1,0 +1,10 @@
+.monthly-filters {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:end;gap:14px 12px;padding:14px;border:1px solid #c2d4eb;border-radius:14px;background:#f7faff;min-width:0;}
+.monthly-filters label,.filter-field {display:grid;gap:8px;min-width:0;color:var(--muted);font-size:13px;}
+.monthly-filters input:not([type=checkbox]),.monthly-filters select {box-sizing:border-box;width:100%;min-width:0;max-width:100%;height:44px;padding:10px;border:1px solid #c2d4eb;border-radius:10px;background:var(--surface,white);color:var(--text);font:inherit;font-size:16px;}
+.monthly-filters .full-width,.monthly-filters > button,.monthly-filters > p {grid-column:1/-1;}
+.monthly-filters > button {width:100%;min-height:44px;margin:0;border-radius:10px;}
+.monthly-filters > p {margin:0;color:var(--red);}
+.filter-field :deep(.searchable-select__control),.group-filter :deep(.group-tree-select__trigger) {min-height:44px;box-sizing:border-box;border-radius:10px;background:var(--surface,white);font-size:16px;}
+@media(max-width:350px) {.monthly-filters {grid-template-columns:minmax(0,1fr);}}
+
+

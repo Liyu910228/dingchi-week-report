@@ -1,0 +1,5 @@
+.goal-summaries { display: grid; gap: 14px; white-space: normal; }
+.goal-summary-section { min-width: 0; }
+.goal-summary-section + .goal-summary-section { padding-top: 14px; border-top: 1px dashed color-mix(in srgb, var(--accent) 35%, var(--surface-strong)); }
+.goal-summary-section h3 { display: inline-block; max-width: 100%; margin: 0 0 6px; padding: 3px 8px; border-radius: 5px; color: var(--accent-dark); background: var(--surface-soft); font-size: 0.78rem; line-height: 1.5; font-weight: 600; overflow-wrap: anywhere; }
+.goal-summary-section p, .goal-summary-text { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; }

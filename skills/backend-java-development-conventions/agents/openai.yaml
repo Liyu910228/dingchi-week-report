@@ -1,0 +1,6 @@
+interface:
+  display_name: "Java 后端开发规范"
+  short_description: "按分层、安全、契约与测试规范开发 Java 后端"
+  default_prompt: "使用 $backend-java-development-conventions 按 Java 后端开发规范新增、重构或审查这段代码。"
+policy:
+  allow_implicit_invocation: true

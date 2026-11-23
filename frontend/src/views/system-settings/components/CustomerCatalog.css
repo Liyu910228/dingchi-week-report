@@ -1,0 +1,78 @@
+.customer-catalog {
+  overflow-x: auto;
+  border-top: 1px solid var(--line);
+}
+.empty-card {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.customer-table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.customer-column-code { width: 20%; }
+.customer-column-status { width: 16%; }
+.customer-column-order { width: 80px; }
+.customer-column-actions { width: 160px; }
+.customer-table th,
+.customer-table td {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+.customer-table thead th {
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+  background: var(--surface-soft);
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.customer-table tbody tr:last-child td { border-bottom: none; }
+.customer-table tbody tr:hover { background: var(--surface-soft); }
+.customer-table .customer-table__num {
+  text-align: center;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.customer-table .customer-table__actions {
+  text-align: right;
+  white-space: nowrap;
+}
+.customer-table__actions .ghost-button {
+  min-height: 32px;
+  margin-left: 0.65rem;
+  padding: 0.25rem 0;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--accent-dark);
+  font-size: 0.82rem;
+}
+.customer-table__actions .ghost-button:hover { text-decoration: underline; }
+.customer-table__actions .is-danger { color: var(--red); }
+.customer-table__status {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+}
+.customer-table__status.is-active {
+  background: color-mix(in srgb, var(--green) 12%, transparent);
+  color: var(--green);
+}
+.customer-table__status.is-inactive {
+  background: var(--surface-soft);
+  color: var(--muted);
+}
+@media (max-width: 640px) {
+  .customer-table th,
+  .customer-table td { padding-left: 1rem; padding-right: 1rem; }
+}

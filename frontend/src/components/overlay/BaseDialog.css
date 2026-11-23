@@ -1,0 +1,175 @@
+.dialog-backdrop {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: grid;
+  padding: 1.25rem;
+  overflow-y: auto;
+  place-items: center;
+  background: rgba(13, 38, 78, 0.42);
+  backdrop-filter: blur(6px);
+}
+
+.dialog-panel {
+  box-sizing: border-box;
+  width: min(100%, var(--dialog-width));
+  max-height: calc(100vh - 2.5rem);
+  overflow: hidden auto;
+  border: 1px solid rgba(116, 171, 236, 0.28);
+  border-radius: 26px;
+  background: var(--surface-strong);
+  box-shadow: 0 28px 80px rgba(20, 64, 119, 0.28);
+}
+
+.dialog-panel--fixed {
+  display: grid;
+  height: min(var(--dialog-height), calc(100vh - 2.5rem));
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+}
+
+.dialog-panel--fixed .dialog-body {
+  min-height: 0;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.dialog-panel--fullscreen {
+  width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+  border: 0;
+  border-radius: 0;
+}
+
+.dialog-panel--overflow-visible {
+  overflow: visible;
+}
+
+.dialog-backdrop:has(.dialog-panel--fullscreen) {
+  padding: 0;
+  overflow: hidden;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.75rem 2.1rem 1.2rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.dialog-header h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.65rem;
+}
+
+.dialog-header p {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.dialog-close {
+  display: grid;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--muted);
+  background: var(--surface-soft);
+  cursor: pointer;
+  font: 400 1.35rem/1 system-ui, sans-serif;
+  place-items: center;
+}
+
+.dialog-close:hover:not(:disabled) {
+  border-color: rgba(47, 128, 237, 0.4);
+  color: var(--accent-dark);
+}
+
+.dialog-close:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.dialog-body {
+  padding: 1.55rem 2.1rem 1.7rem;
+}
+
+.dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  padding: 0.75rem 2.1rem 0.85rem;
+  border-top: 1px solid var(--line);
+  background: var(--surface-soft);
+}
+
+.base-dialog-enter-active,
+.base-dialog-leave-active {
+  transition: opacity 160ms ease;
+}
+
+.base-dialog-enter-active .dialog-panel,
+.base-dialog-leave-active .dialog-panel {
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.base-dialog-enter-from,
+.base-dialog-leave-to,
+.base-dialog-enter-from .dialog-panel,
+.base-dialog-leave-to .dialog-panel {
+  opacity: 0;
+}
+
+.base-dialog-enter-from .dialog-panel,
+.base-dialog-leave-to .dialog-panel {
+  transform: translateY(10px) scale(0.985);
+}
+
+@media (max-width: 560px) {
+  .dialog-backdrop {
+    padding: 0.75rem;
+    place-items: end center;
+  }
+
+  .dialog-panel {
+    width: 100%;
+    max-height: calc(100vh - 1.5rem);
+    border-radius: 20px;
+  }
+
+  .dialog-panel--fixed {
+    height: calc(100vh - 1.5rem);
+  }
+
+  .dialog-panel--fullscreen {
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .dialog-header,
+  .dialog-body {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .dialog-actions {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .dialog-actions > button,
+  .dialog-actions > a {
+    flex: 1 1 auto;
+  }
+}

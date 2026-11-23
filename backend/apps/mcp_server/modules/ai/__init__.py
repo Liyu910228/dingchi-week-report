@@ -1,0 +1,1 @@
+"""AI-related MCP capabilities."""

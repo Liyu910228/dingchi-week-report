@@ -1,0 +1,39 @@
+.monthly-table-wrap { overflow:auto; }
+.monthly-table { width:100%; min-width:1090px; table-layout:fixed; border-collapse:collapse; }
+.monthly-table th { padding:0.78rem 0.7rem; background:#f2f7fd; color:#5b76a0; font-size:0.74rem; font-weight:750; text-align:left; white-space:nowrap; }
+.monthly-table td { padding:0.82rem 0.7rem; border-bottom:1px solid var(--monthly-row-divider); font-size:0.8rem; text-align:left; vertical-align:middle; }
+.monthly-table tbody tr:hover { background:#fbfdff; }
+.monthly-table .empty-row { padding:2.8rem 1rem; color:var(--muted); text-align:center; }
+.monthly-table .summary { white-space:pre-wrap; overflow-wrap:anywhere; }
+.monthly-table .actions { overflow-wrap:anywhere; }
+.actions a,.actions button { display:inline-block; padding:0.3rem; border:0; background:transparent; color:var(--accent-dark); cursor:pointer; font:inherit; }
+.actions .danger { color:var(--red); }
+
+.change-row{background:#f7faff}
+
+.tree-toggle{border:0;background:transparent;color:#287ad4;cursor:pointer;padding:4px 0;font-size:16px}.change-row td:first-child{padding-left:26px;}
+
+.monthly-table th[data-column-key="month_key"]{width:130px}.monthly-table th[data-column-key="employee_name"]{width:90px}.monthly-table th[data-column-key="group_name"]{width:110px}.monthly-table th[data-column-key="status"]{width:100px}.monthly-table th[data-column-key="updated_at"]{width:165px}.monthly-table th[data-column-key="actions"]{width:220px}.monthly-table td{overflow-wrap:anywhere}.monthly-table .summary{line-height:1.7;}
+
+.monthly-table .is-pending {
+  background: rgba(255, 239, 198, 0.52);
+  transition: background-color 0.18s ease;
+}
+.monthly-table .is-pending:hover { background: rgba(255, 232, 176, 0.62); }
+/* 高亮铺在整行，避免单元格滤镜的合成图层遮住折叠边框。 */
+.monthly-table .is-pending td {
+  background: transparent;
+  border-bottom-color: var(--monthly-row-divider);
+}
+
+.monthly-table.is-personal { min-width:890px; }
+
+.monthly-table th[data-column-key="role_code"] { width: 130px; }
+
+.monthly-table th { overflow: hidden; text-overflow: ellipsis; }
+
+.monthly-table { --monthly-row-divider: color-mix(in srgb, var(--accent) 32%, var(--surface-strong)); }
+.monthly-table th { border-bottom: 1px solid var(--monthly-row-divider); }
+.month-value { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.month-toggle-slot { display: inline-flex; align-items: center; justify-content: center; width: 20px; flex: 0 0 20px; }
+.tree-toggle { width: 20px; line-height: 1; }

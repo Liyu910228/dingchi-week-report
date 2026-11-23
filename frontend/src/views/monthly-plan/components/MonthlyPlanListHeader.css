@@ -1,0 +1,4 @@
+.monthly-list-header { display:flex; align-items:flex-end; gap:1rem; min-width:0; border-bottom:0; }
+.monthly-list-tabs { flex:1; min-width:0; }
+.monthly-list-header > a { flex-shrink:0; margin-bottom:8px; }
+.monthly-list-warning { margin:0; color:var(--red); font-size:0.8rem; line-height:1.5; }

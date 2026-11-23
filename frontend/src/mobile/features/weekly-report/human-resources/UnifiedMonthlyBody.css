@@ -1,0 +1,4 @@
+.goal-card{display:grid;gap:12px;padding:22px;min-width:0}.goal-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.goal-heading h2{margin:0;font-size:1.15rem;color:var(--text-strong)}.goal-text{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6}textarea{box-sizing:border-box;width:100%;min-height:160px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-soft);color:var(--text);font:inherit;line-height:1.6;resize:vertical}textarea:focus{border-color:var(--accent);outline:3px solid rgba(47,128,237,.13)}
+
+.required { color: var(--red); }
+textarea::placeholder { color: var(--muted); opacity: 1; }

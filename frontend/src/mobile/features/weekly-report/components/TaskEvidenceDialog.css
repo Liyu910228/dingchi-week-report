@@ -1,0 +1,16 @@
+.evidence-form { display: grid; gap: 16px; min-width: 0; }
+.evidence-label { display: grid; gap: 10px; color: var(--text-strong); font-weight: 600; }
+.evidence-label textarea, .attachment-item input { width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid var(--line); border-radius: 10px; color: var(--text); background: var(--surface-soft); font: inherit; font-weight: 400; line-height: 1.6; }
+.evidence-label textarea { resize: vertical; }
+.attachment-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.file-input { display: none; }
+.attachment-item { display: grid; grid-template-columns: minmax(0, 1fr) minmax(180px, 1fr) auto; align-items: center; gap: 12px; padding: 14px; border: 1px solid var(--line); border-radius: 12px; }
+.attachment-item label { display: grid; gap: 6px; font-size: 0.85rem; color: var(--muted); }
+.attachment-name { overflow-wrap: anywhere; min-width: 0; }
+.remove-attachment { padding: 6px; border: 0; background: transparent; color: var(--red); font: inherit; cursor: pointer; }
+.empty-attachments { color: var(--muted); }
+.evidence-error { margin: 0; color: var(--red); }
+@media (max-width: 640px) {
+  .attachment-item { grid-template-columns: minmax(0, 1fr) auto; }
+  .attachment-item label { grid-column: 1 / -1; grid-row: 2; }
+}

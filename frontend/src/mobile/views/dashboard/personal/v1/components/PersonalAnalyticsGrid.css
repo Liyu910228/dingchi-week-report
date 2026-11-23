@@ -1,0 +1,308 @@
+.personal-analytics-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(210px, 0.72fr) minmax(210px, 0.72fr) minmax(240px, 0.95fr);
+  gap: 12px;
+}
+
+.personal-panel {
+  min-width: 0;
+  overflow: hidden;
+  padding: 13px 15px;
+  border: 1px solid rgba(109, 169, 239, 0.2);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 6px 17px rgba(67, 133, 205, 0.09), inset 0 1px rgba(255, 255, 255, 0.95);
+}
+
+.personal-panel-heading,
+.panel-title {
+  display: flex;
+  align-items: center;
+}
+
+.personal-panel-heading {
+  min-height: 31px;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.panel-title {
+  min-width: 0;
+  gap: 8px;
+}
+
+.panel-icon {
+  display: grid;
+  width: 25px;
+  height: 25px;
+  flex: 0 0 25px;
+  place-items: center;
+  border-radius: 8px;
+  color: #fff;
+  box-shadow: 0 4px 9px rgba(51, 129, 224, 0.19);
+}
+
+.panel-icon--blue { background: linear-gradient(145deg, #63baff, #1d7ce7); }
+.panel-icon--purple { background: linear-gradient(145deg, #b48aff, #6e45df); }
+.panel-icon--green { background: linear-gradient(145deg, #4bdfb4, #0a9e81); }
+.panel-icon--cyan { background: linear-gradient(145deg, #5fd7ff, #268ee8); }
+
+.panel-kicker {
+  display: block;
+  color: #347fe0;
+  font-size: 12px;
+}
+
+.personal-panel h2 {
+  margin: 1px 0 0;
+  color: #102b59;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.16;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 12px;
+  color: #7389aa;
+  font-size: 12px;
+}
+
+.chart-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.chart-legend span::before {
+  display: inline-block;
+  width: 28px;
+  height: 8px;
+  content: "";
+}
+
+.legend-blue::before {
+  background:
+    radial-gradient(circle at 4px 50%, #2d83ee 0 3px, transparent 3.5px),
+    linear-gradient(#2d83ee, #2d83ee) 4px 3px / 24px 2px no-repeat;
+}
+.legend-green::before {
+  background:
+    radial-gradient(circle at 4px 50%, #12b98d 0 3px, transparent 3.5px),
+    linear-gradient(#12b98d, #12b98d) 4px 3px / 24px 2px no-repeat;
+}
+
+.analytics-empty {
+  display: grid;
+  min-height: 170px;
+  place-items: center;
+  padding: 18px 12px;
+  border: 1px dashed rgba(115, 158, 207, 0.25);
+  border-radius: 10px;
+  color: #8aa0bd;
+  background: linear-gradient(135deg, rgba(248, 252, 255, 0.8), rgba(239, 247, 255, 0.58));
+  font-size: 13px;
+  text-align: center;
+}
+
+.analytics-empty--trend {
+  min-height: 190px;
+}
+
+.personal-trend-panel {
+  padding-bottom: 6px;
+}
+
+.distribution-content {
+  display: flex;
+  min-height: 214px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 7px 4px 4px;
+}
+
+.distribution-chart-wrap {
+  position: relative;
+  display: grid;
+  flex: 0 0 152px;
+  place-items: center;
+}
+
+.distribution-chart-wrap strong,
+.distribution-chart-wrap > span {
+  position: absolute;
+}
+
+.distribution-chart-wrap strong {
+  margin-top: -4px;
+  color: #102b59;
+  font-size: 24px;
+  font-weight: 750;
+}
+
+.distribution-chart-wrap > span {
+  margin-top: 27px;
+  color: #748bad;
+  font-size: 11px;
+}
+
+.distribution-legend {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+  min-width: 0;
+  overflow: hidden;
+  gap: 7px 12px;
+}
+
+.distribution-legend-item {
+  display: grid;
+  grid-template-columns: 8px minmax(0, 1fr) auto;
+  min-width: 0;
+  gap: 6px;
+  align-items: center;
+  color: #607a9e;
+  font-size: 12px;
+}
+
+.distribution-legend-item > span:not(.legend-dot) {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legend-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.distribution-legend-item strong {
+  color: #102b59;
+  font-size: 14px;
+}
+
+.overall-note {
+  color: #8297b5;
+  font-size: 12px;
+}
+
+.personal-overall-panel {
+  position: relative;
+  display: grid;
+  align-content: start;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 88% 76%, rgba(105, 190, 255, 0.18), transparent 42%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(236, 247, 255, 0.95));
+}
+
+.overall-artwork {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  opacity: 0.54;
+  pointer-events: none;
+}
+
+.personal-overall-panel > :not(.overall-artwork) {
+  position: relative;
+  z-index: 1;
+}
+
+.overall-content {
+  display: grid;
+  min-height: 170px;
+  place-items: center;
+}
+
+.overall-note {
+  display: inline-flex;
+  width: min(100%, 220px);
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 8px;
+  border: 1px solid rgba(66, 148, 236, 0.2);
+  border-radius: 8px;
+  color: #2473d3;
+  background: linear-gradient(180deg, rgba(250, 253, 255, 0.92), rgba(236, 247, 255, 0.92));
+}
+
+.overall-note svg { color: #12ae84; }
+
+@media (max-width: 1320px) {
+  .personal-analytics-grid {
+    grid-template-columns: minmax(0, 1.6fr) repeat(2, minmax(205px, 0.8fr));
+  }
+
+  .personal-overall-panel {
+    grid-column: 1 / -1;
+  }
+
+  .overall-content {
+    display: flex;
+    min-height: 138px;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .personal-overall-panel > .analytics-empty {
+    min-height: 138px;
+  }
+}
+
+@media (max-width: 920px) {
+  .personal-analytics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .personal-trend-panel,
+  .personal-overall-panel {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .personal-analytics-grid {
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+
+  .personal-trend-panel,
+  .personal-overall-panel {
+    grid-column: auto;
+  }
+
+  .personal-panel {
+    padding: 11px;
+  }
+
+  .personal-trend-chart {
+    height: 168px;
+  }
+
+  .overall-content {
+    min-height: 160px;
+  }
+
+  .analytics-empty,
+  .analytics-empty--trend,
+  .personal-overall-panel > .analytics-empty {
+    min-height: 150px;
+  }
+}

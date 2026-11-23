@@ -1,0 +1,211 @@
+.page-stack {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.surface-card {
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.dashboard-card {
+  border: 1px solid rgba(109, 169, 239, 0.2);
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.icon-button,
+.text-button {
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.primary-button,
+.secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.7rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ghost-button {
+  min-height: 40px;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--accent-dark);
+  background: transparent;
+  cursor: pointer;
+}
+
+.ghost-button:hover {
+  background: var(--surface-soft);
+}
+
+.field-control,
+.field-textarea,
+.field-select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--text);
+  background: var(--surface-strong);
+  outline: none;
+}
+
+.field-control,
+.field-select {
+  min-height: 42px;
+  padding: 0.6rem 0.75rem;
+}
+
+.field-textarea {
+  min-height: 92px;
+  padding: 0.7rem 0.75rem;
+  resize: vertical;
+}
+
+.field-control:focus,
+.field-textarea:focus,
+.field-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(47, 128, 237, 0.12);
+}
+
+/* 空输入框的提示词要明显区别于已填写内容，避免被误认为默认值。 */
+input::placeholder,
+textarea::placeholder {
+  color: #91a6c2;
+  font-size: 0.94em;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  opacity: 1;
+}
+
+.required-mark {
+  display: inline;
+  margin-left: 4px;
+  color: #d9485f;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.task-editor__label {
+  display: inline-flex;
+  align-items: baseline;
+  min-height: 1.4em;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 0.7rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.status-pill--draft,
+.status-pill--in_progress {
+  color: #8b5b08;
+  background: #fff2d6;
+}
+
+.status-pill--submitted {
+  color: #1f63c7;
+  background: #e1efff;
+}
+
+.status-pill--approved,
+.status-pill--on_time {
+  color: #07825d;
+  background: #dff8ef;
+}
+
+.status-pill--returned,
+.status-pill--overdue,
+.status-pill--late {
+  color: #c13f47;
+  background: #ffe5e7;
+}
+
+.primary-button {
+  border: 1px solid var(--accent);
+  color: white;
+  background: var(--accent);
+}
+
+.primary-button:hover {
+  background: var(--accent-dark);
+}
+
+.secondary-button {
+  border: 1px solid var(--line);
+  color: var(--text);
+  background: var(--surface-strong);
+}
+
+.danger-action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid #f3a5ad;
+  border-radius: 10px;
+  color: #d83f4f;
+  background: #fff3f4;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
+}
+
+.danger-action-button:hover:not(:disabled) {
+  border-color: #e1515d;
+  color: #fff;
+  background: #e1515d;
+}
+
+.danger-action-button:focus-visible {
+  outline: 3px solid rgba(225, 81, 93, 0.18);
+  outline-offset: 2px;
+}
+
+.danger-action-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.insert-button:has(svg), .cell-insert:has(svg) { color: #1763cf; border: 1px solid #8db8ee; background: #e4efff; border-radius: 6px; }
+.insert-button:has(svg):hover, .cell-insert:has(svg):hover { color: #fff; background: #246ed3; border-color: #246ed3; }
+
+/* High-contrast task insertion controls. */
+button.insert-button:has(svg), button.cell-insert:has(svg) { display: inline-grid; place-items: center; min-width: 30px; min-height: 30px; padding: 4px; color: #fff; background: #2875dc; border: 1px solid #1b60bf; border-radius: 7px; box-shadow: 0 2px 5px rgb(32 98 190 / 20%); }
+button.insert-button:has(svg):hover, button.cell-insert:has(svg):hover { color: #fff; background: #195bb7; border-color: #164e9c; }
+button.insert-button:has(svg):focus-visible, button.cell-insert:has(svg):focus-visible { outline: 2px solid #78a9ee; outline-offset: 2px; }
+button.insert-button:has(svg):disabled, button.cell-insert:has(svg):disabled { opacity: .45; box-shadow: none; cursor: not-allowed; }
+
+.task-action-tooltip { position: fixed; z-index: 2147483647; pointer-events: none; padding: 6px 10px; border-radius: 6px; background: #18365d; color: #fff; font-size: 13px; font-weight: 400; line-height: 1.5; white-space: nowrap; box-shadow: 0 3px 10px rgb(0 0 0 / 16%); }
+
+.task-action-tooltip[popover] { margin: 0; inset: auto; border: 0; overflow: visible; }

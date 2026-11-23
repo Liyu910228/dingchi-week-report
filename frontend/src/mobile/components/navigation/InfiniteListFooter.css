@@ -1,0 +1,2 @@
+.infinite-list-footer {display:flex;justify-content:center;align-items:center;min-height:56px;padding:12px;color:var(--muted);font-size:13px;}
+.infinite-list-footer button {min-height:44px;padding:10px 24px;border:1px solid var(--line);border-radius:12px;background:var(--surface,white);color:var(--accent-dark);font:inherit;}

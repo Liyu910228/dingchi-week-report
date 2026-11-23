@@ -1,0 +1,18 @@
+.chat-panel {
+  display: grid;
+  grid-template-rows: auto minmax(340px, 56vh) auto auto;
+  min-height: 640px;
+  overflow: hidden;
+}
+
+.chat-panel > .base-alert {
+  margin: 0 1.75rem 1rem;
+}
+
+@media (max-width: 540px) {
+  .chat-panel {
+    min-height: calc(100vh - 170px);
+    border-radius: 20px;
+  }
+}
+

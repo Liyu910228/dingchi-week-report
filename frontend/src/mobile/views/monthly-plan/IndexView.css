@@ -1,0 +1,22 @@
+.monthly-plan-page { display: grid; gap: 1rem; min-width: 0; }
+.monthly-list-card { display: grid; gap: 0; min-width: 0; padding: 1.25rem 1.3rem; }
+.monthly-list-pagination { padding-top: 1rem; }
+
+
+
+.monthly-tab-content { display:grid; gap:1rem; min-width:0; }
+@media (max-width: 580px) {
+  .monthly-list-card { padding: 1rem; }
+  .monthly-list-pagination { gap: 8px; }
+}
+
+
+
+.monthly-list-card {padding:14px;gap:16px;border-radius:16px;}
+
+
+
+.monthly-tab-content {gap:16px;}
+
+.monthly-plan-page {gap:var(--panel-stack-gap);}
+

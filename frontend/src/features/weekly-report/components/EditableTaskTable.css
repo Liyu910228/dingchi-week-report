@@ -1,0 +1,46 @@
+.editable-table-wrap { container-type: inline-size; width: 100%; max-width: 100%; overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; }
+.editable-task-table { width: 100%; min-width: 1100px; table-layout: fixed; border-collapse: separate; border-spacing: 0; }
+.editable-task-table th, .editable-task-table td { box-sizing: border-box; padding: 12px 10px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); vertical-align: top; text-align: left; }
+.editable-task-table th { color: var(--muted); background: var(--surface-soft); font-weight: 700; text-align: center; }
+.editable-task-table th:last-child, .editable-task-table td:last-child { border-right: 0; }
+.editable-task-table tr:last-child td { border-bottom: 0; }
+.editable-task-table .value-col { width: 200px; }
+.editable-task-table .serial-col { width: 56px; text-align: center; }
+.editable-task-table .customer-col { width: 200px; }
+.editable-task-table .task-col { width: 300px; }
+.editable-task-table .multiline-col { width: 300px; }
+.editable-task-table .date-col { width: 180px; white-space: nowrap; }
+.editable-task-table .actions-col { position: sticky; right: 0; width: 210px; background: var(--surface-strong); box-shadow: -2px 0 var(--line); z-index: 2; }
+.editable-task-table thead .actions-col { background: var(--surface-soft); z-index: 3; }
+.editable-task-table td:focus-within { position: relative; z-index: 5; }
+.editable-task-table td.actions-col:focus-within { position: sticky; }
+.text-cell { display: block; width: 100%; min-height: 42px; padding: 8px; border: 1px solid transparent; border-radius: 8px; color: var(--text); background: transparent; font: inherit; line-height: 1.65; text-align: left; white-space: pre-wrap; overflow-wrap: anywhere; cursor: pointer; }
+.text-cell:hover, .text-cell:focus-visible { border-color: var(--line); background: var(--surface-soft); outline: 2px solid var(--accent); outline-offset: -1px; }
+.row-actions { display: flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; }
+.link-button { padding: 6px 5px; border: 0; background: transparent; color: var(--accent-dark); cursor: pointer; font: inherit; }
+.danger { color: var(--red); }
+.insert-button { display: inline-grid; place-items: center; flex-shrink: 0; width: 28px; height: 28px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface-soft); color: var(--accent-dark); cursor: pointer; }
+.insert-button:hover, .insert-button:focus-visible { border-color: var(--accent); outline: 2px solid var(--line); }
+.attachment-button { font-size: 0.8rem; }
+.empty { padding: 28px !important; text-align: center !important; color: var(--muted); }
+.blank-row td { background: var(--surface-soft); }
+
+.shared-cell { position: relative; padding-bottom: 36px !important; }
+.cell-insert { position: absolute; right: 6px; bottom: 6px; display: inline-grid; place-items: center; width: 26px; height: 26px; padding: 0; border: 1px solid var(--line); border-radius: 6px; background: var(--surface-soft); color: var(--accent-dark); opacity: 0; pointer-events: none; cursor: pointer; }
+.shared-cell:hover .cell-insert, .shared-cell:focus-within .cell-insert { opacity: 1; pointer-events: auto; }
+@media (hover: none) { .cell-insert { opacity: 1; pointer-events: auto; } }
+
+.delivery-mode .actions-col { width: 110px; }
+
+.empty p { margin: 0 0 12px; }
+.empty-task-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 16px; }
+.empty-task-button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; padding: 9px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-soft); color: var(--accent-dark); cursor: pointer; font: inherit; }
+.empty-task-button:hover, .empty-task-button:focus-visible { border-color: var(--accent); outline: 2px solid var(--line); outline-offset: 2px; }
+
+.empty-task-content { position: sticky; left: 28px; width: calc(100cqw - 56px); }
+
+/* High-contrast task insertion controls. */
+button.insert-button:has(svg), button.cell-insert:has(svg) { display: inline-grid; place-items: center; min-width: 30px; min-height: 30px; padding: 4px; color: #fff; background: #2875dc; border: 1px solid #1b60bf; border-radius: 7px; box-shadow: 0 2px 5px rgb(32 98 190 / 20%); }
+button.insert-button:has(svg):hover, button.cell-insert:has(svg):hover { color: #fff; background: #195bb7; border-color: #164e9c; }
+button.insert-button:has(svg):focus-visible, button.cell-insert:has(svg):focus-visible { outline: 2px solid #78a9ee; outline-offset: 2px; }
+button.insert-button:has(svg):disabled, button.cell-insert:has(svg):disabled { opacity: .45; box-shadow: none; cursor: not-allowed; }

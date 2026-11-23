@@ -1,0 +1,38 @@
+.mobile-task-cards {display:grid!important;gap:14px;width:100%!important;min-width:0!important;}
+.mobile-task-cards [data-mobile-task-card] {display:grid;min-width:0;padding:14px;border:1px solid var(--line,#c2d4eb);border-radius:16px;background:var(--surface,white);}
+.mobile-task-cards :deep([data-card-field]) {display:grid;gap:8px;min-width:0;width:auto!important;padding:12px 0;border-bottom:1px solid var(--line,#d5e2f1);position:static!important;overflow-wrap:anywhere;white-space:normal;}
+.mobile-task-cards :deep([data-card-field]::before) {content:attr(data-label);color:var(--muted);font-size:13px;line-height:1.5;}
+.mobile-task-cards :deep([data-card-field][data-label=""]::before) {display:none;}
+.mobile-task-cards :deep([data-card-field]:last-child) {border-bottom:0;}
+.mobile-task-cards :deep(input),.mobile-task-cards :deep(select),.mobile-task-cards :deep(textarea) {box-sizing:border-box;max-width:100%;min-width:0;font-size:16px;}
+.mobile-task-cards :deep(.text-cell),.mobile-task-cards :deep(.monthly-task-text-cell) {width:100%;min-height:44px;text-align:left;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--surface-soft);font-weight:400;white-space:pre-wrap;}
+.mobile-task-cards :deep(.cell-insert) {position:static!important;justify-self:end;display:inline-flex;align-items:center;gap:4px;min-height:36px;width:auto;padding:6px 10px;color:var(--accent-dark);border:1px solid var(--line);border-radius:8px;background:var(--surface-soft);}
+.mobile-task-cards :deep(.cell-insert::after) {content:attr(aria-label);font-size:12px;}
+.mobile-task-cards :deep(.row-actions),.mobile-task-cards :deep(.actions),.mobile-task-cards :deep(.actions-col) {display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;}
+.mobile-task-cards :deep(.insert-button) {width:auto;min-height:40px;border:1px solid var(--line);border-radius:10px;padding:8px;}
+.mobile-task-cards :deep(.insert-button::after) {content:'新增任务';font-size:13px;}
+.mobile-task-details {min-width:0;}
+.mobile-task-details > summary {display:flex;align-items:center;justify-content:space-between;min-height:48px;cursor:pointer;color:var(--accent-dark);font-size:14px;list-style:none;}
+.mobile-task-details > summary::after {content:'展开';font-size:13px;}
+.mobile-task-details[open] > summary::after {content:'收起';}
+
+.editable-table-wrap,.monthly-task-table-wrap,.report-task-table-wrap {overflow:visible!important;border:0!important;border-radius:0!important;max-height:none!important;}
+.mobile-task-cards :deep(.cell-insert) {opacity:1!important;pointer-events:auto!important;height:auto;}
+.mobile-task-cards :deep([data-card-field][data-label="序号"]) {display:flex;align-items:center;gap:6px;color:var(--accent-dark);font-size:13px;font-weight:600;padding-top:0;}
+.mobile-task-cards :deep([data-card-field][data-label="序号"]::before) {content:'任务';color:var(--accent-dark);}
+.mobile-task-cards :deep(.empty),.mobile-task-cards :deep(.monthly-task-empty),.mobile-task-cards :deep(.empty-cell) {padding:20px 0;text-align:center;}
+.mobile-task-cards :deep(.empty::before),.mobile-task-cards :deep(.monthly-task-empty::before),.mobile-task-cards :deep(.empty-cell::before) {display:none;}
+
+.mobile-task-cards :deep([data-card-field]) {padding:12px 0!important;}
+.mobile-task-cards :deep(.cell-insert::after) {content:'新增子项';}
+
+.mobile-task-cards :deep(.insert-button),.mobile-task-cards :deep(.cell-insert) {display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:6px;vertical-align:middle;line-height:1.4;}
+.mobile-task-cards :deep(.insert-button svg),.mobile-task-cards :deep(.cell-insert svg) {display:block;flex:0 0 auto;width:17px;height:17px;margin:0;vertical-align:middle;}
+.mobile-task-cards :deep(.insert-button::after),.mobile-task-cards :deep(.cell-insert::after) {display:block;line-height:1.4;margin:0;white-space:nowrap;}
+
+.mobile-task-cards :deep(button:not(.user-content)),.mobile-task-cards :deep(.insert-button),.mobile-task-cards :deep(.cell-insert) {font-family:inherit;font-size:14px!important;font-weight:400;font-style:normal;line-height:1.4;letter-spacing:normal;}
+.mobile-task-cards :deep(.insert-button::after),.mobile-task-cards :deep(.cell-insert::after) {font-family:inherit;font-size:inherit;font-weight:inherit;font-style:normal;line-height:inherit;}
+
+.mobile-task-cards :deep(.cell-insert) {justify-self:center!important;align-self:center;margin-inline:auto;}
+.mobile-task-cards :deep(.cell-insert::after) {content:none!important;display:none!important;}
+.mobile-task-cards :deep(.cell-insert > span) {display:block;font-family:inherit;font-size:inherit;font-weight:inherit;line-height:1.4;}

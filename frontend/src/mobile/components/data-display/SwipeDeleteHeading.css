@@ -1,0 +1,7 @@
+.swipe-heading {position:relative;display:block!important;padding:0!important;overflow:hidden;touch-action:pan-y;list-style:none;}
+.swipe-heading::-webkit-details-marker {display:none;}
+.swipe-heading-content {position:relative;display:flex;align-items:center;gap:8px;min-height:52px;box-sizing:border-box;padding:10px 12px;background:inherit;box-shadow:inherit;transition:transform .18s ease;}
+.swipe-heading-content.is-dragging {transition:none;}
+.swipe-delete {position:absolute;inset:0 0 0 auto;width:76px;border:0;border-radius:0;background:#df4d56;color:white;font:inherit;font-size:14px;cursor:pointer;}
+@media(prefers-reduced-motion:reduce){.swipe-heading-content{transition:none;}}
+

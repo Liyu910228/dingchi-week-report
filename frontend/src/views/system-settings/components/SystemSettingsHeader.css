@@ -1,0 +1,29 @@
+.settings-header {
+  padding: 0.25rem 0.25rem 0;
+}
+.settings-header h1 {
+  margin: 0 0 1rem;
+  color: var(--text-strong);
+  font-size: 1.4rem;
+}
+.settings-tabs {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line);
+}
+.settings-tabs a {
+  padding: 0.65rem 0.25rem;
+  border-bottom: 3px solid transparent;
+  color: var(--muted);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+.settings-tabs a:hover,
+.settings-tabs a.is-active {
+  color: var(--accent-dark);
+}
+.settings-tabs a.is-active {
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}

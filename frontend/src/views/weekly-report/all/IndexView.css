@@ -1,0 +1,35 @@
+.weekly-report-page {
+  display: grid;
+  gap: 1rem;
+}
+
+.page-alert {
+  margin: 0;
+  padding: 0.78rem 0.95rem;
+  border: 1px solid #ffd0ce;
+  border-radius: 10px;
+  color: #a84343;
+  background: #fff2f1;
+  font-size: 0.8rem;
+}
+
+.report-list-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem 1.3rem;
+}
+
+.report-list-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.report-list-heading h1 {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: clamp(1.45rem, 2.5vw, 2rem);
+}
+
+.weekly-report-page {gap:var(--panel-stack-gap);}
+

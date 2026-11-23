@@ -1,0 +1,40 @@
+.evidence-text {
+  display: block;
+  width: 100%;
+  min-height: 42px;
+  padding: 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  line-height: 1.65;
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.evidence-text:hover,
+.evidence-text:focus-visible {
+  border-color: var(--line);
+  background: var(--surface-soft);
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.attachment-button {
+  padding: 6px 5px;
+  border: 0;
+  background: transparent;
+  color: var(--accent-dark);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.attachment-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}

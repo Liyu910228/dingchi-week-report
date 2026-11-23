@@ -1,0 +1,5 @@
+.monthly-outcome, .monthly-planned-date { padding: 13px var(--monthly-plan-cell-padding, 16px); border-bottom: 1px solid var(--line); vertical-align: top; text-align: left; }
+.outcome-text { display: block; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; }
+textarea, input { box-sizing: border-box; width: 100%; min-width: 0; padding: 8px; border: 1px solid transparent; border-radius: 8px; background: transparent; color: var(--text); font: inherit; }
+textarea { resize: vertical; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; }
+textarea:hover, textarea:focus, input:hover, input:focus { border-color: var(--line); background: var(--surface-soft); outline-color: var(--accent); }

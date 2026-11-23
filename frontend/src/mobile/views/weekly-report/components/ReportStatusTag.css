@@ -1,0 +1,25 @@
+.report-status-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 0.68rem;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.report-status-tag--not_started {
+  color: #976400;
+  background: #fff1cc;
+}
+
+.report-status-tag--in_progress {
+  color: #1769aa;
+  background: #e3f0ff;
+}
+
+.report-status-tag--completed {
+  color: #087b54;
+  background: #dff8ed;
+}

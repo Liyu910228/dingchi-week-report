@@ -1,0 +1,4 @@
+.delivery-customer-select { position: relative; min-width: 0; }
+.delivery-customer-select > input:not(.customer-validity) { width: 100%; padding: 0.75rem; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-soft); color: var(--text); font: inherit; }
+.delivery-customer-select small { display: block; margin-top: 0.35rem; color: var(--muted); }
+.delivery-customer-select small button { border: 0; background: transparent; color: var(--accent-dark); cursor: pointer; }

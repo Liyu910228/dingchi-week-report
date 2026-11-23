@@ -1,0 +1,126 @@
+.task-rows {
+  display: grid;
+  margin-top: 7px;
+}
+
+.task-table-head,
+.task-row {
+  display: grid;
+  grid-template-columns: 110px minmax(200px, 1.15fr) minmax(130px, 0.82fr) 52px 58px 64px;
+  gap: 10px;
+  align-items: center;
+}
+
+.task-table-head {
+  min-height: 29px;
+  padding: 0 8px;
+  border-radius: 7px;
+  color: #506c95;
+  background: linear-gradient(90deg, #edf5ff, #f5f9ff);
+  font-size: 0.65rem;
+  text-align: center;
+}
+
+.task-table-head span:nth-child(2) { text-align: left; }
+
+.task-row {
+  min-height: 52px;
+  padding: 5px 8px;
+  border-bottom: 1px solid rgba(102, 160, 224, 0.14);
+}
+
+.task-row:last-child { border-bottom: 0; }
+
+.task-customer {
+  overflow: hidden;
+  color: #17325c;
+  font-size: 0.71rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.task-main {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.task-main strong,
+.task-main small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.task-main strong {
+  color: #10274d;
+  font-size: 0.72rem;
+}
+
+.task-main small {
+  color: #748aab;
+  font-size: 0.61rem;
+}
+
+.task-progress {
+  min-width: 0;
+}
+
+.progress-track {
+  width: 100%;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #dfeaf6;
+}
+
+.progress-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #2f80ed, #11b883);
+}
+
+.task-progress-value,
+.task-rate {
+  font-size: 0.7rem;
+  font-weight: 850;
+  text-align: center;
+}
+
+.task-progress-value { color: #10274d; }
+.task-rate { color: #07966b; }
+
+.task-row .status-pill {
+  min-height: 24px;
+  justify-content: center;
+  padding-inline: 8px;
+  font-size: 0.65rem;
+}
+
+.task-empty {
+  padding: 1.5rem 1rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (max-width: 860px) {
+  .task-table-head { display: none; }
+  .task-row {
+    grid-template-columns: 90px minmax(0, 1fr) 54px 60px;
+    gap: 8px;
+  }
+  .task-progress { grid-column: 2 / 4; }
+  .task-progress-value { grid-column: 4; }
+  .task-rate { grid-column: 3; }
+  .task-row .status-pill { grid-column: 4; }
+}
+
+@media (max-width: 540px) {
+  .task-row { grid-template-columns: 72px minmax(0, 1fr) 58px; }
+  .task-progress { grid-column: 1 / 3; }
+  .task-progress-value { grid-column: 3; }
+  .task-rate { grid-column: 2; }
+  .task-row .status-pill { grid-column: 3; }
+}

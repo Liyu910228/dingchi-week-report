@@ -1,0 +1,16 @@
+.plan-status-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 0.68rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 650;
+  white-space: nowrap;
+  color: var(--muted);
+  background: var(--surface-soft);
+}
+.plan-status-tag--draft,.plan-status-tag--waiting,.plan-status-tag--cancelled,.plan-status-tag--deleted { color:#5f718b; background:#edf1f6; }
+.plan-status-tag--pending { color:#976400; background:#fff1cc; }
+.plan-status-tag--approved { color:#087b54; background:#dff8ed; }
+.plan-status-tag--rejected { color:#be3547; background:#ffe9ed; }

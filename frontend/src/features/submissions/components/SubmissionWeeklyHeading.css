@@ -1,0 +1,29 @@
+.weekly-detail-heading {
+ display:flex; align-items:center; justify-content:space-between; gap:24px;
+ padding:24px 28px; min-width:0;
+ background:radial-gradient(circle at 88% 14%,rgba(182,223,255,.38),transparent 30%),linear-gradient(115deg,var(--surface-strong),var(--surface-soft));
+}
+.weekly-heading-owner { min-width:0; }
+.weekly-heading-owner h1 { margin:0; color:var(--text-strong); font-size:clamp(24px,3vw,34px); font-weight:700; overflow-wrap:anywhere; }
+.weekly-heading-owner p { margin:8px 0 0; color:var(--muted); font-size:14px; line-height:1.6; overflow-wrap:anywhere; }
+.weekly-heading-meta { display:grid; justify-items:end; gap:12px; flex-shrink:0; max-width:100%; text-align:right; }
+.weekly-heading-period { display:grid; gap:4px; }
+.weekly-heading-period > span { color:var(--muted); font-size:12px; }
+.weekly-heading-month { margin-left:16px; }
+.weekly-heading-period strong { color:var(--text-strong); font-size:15px; font-weight:600; overflow-wrap:anywhere; }
+.weekly-heading-status-row { display:flex; align-items:center; flex-wrap:wrap; gap:12px; padding:8px 12px; border:1px solid var(--line); border-radius:12px; background:var(--surface-soft); }
+.weekly-heading-status { padding:4px 10px; border-radius:999px; font-size:13px; font-weight:600; line-height:1.4; }
+.weekly-heading-status--in_progress { color:#1b6fbd; background:#e3f0ff; }
+.weekly-heading-status--not_started { color:#a06b00; background:#fff1cc; }
+.weekly-heading-status--completed { color:#087c64; background:#dff7ee; }
+.weekly-heading-updated { padding-left:12px; border-left:1px solid var(--line); color:var(--muted); font-size:13px; font-weight:400; }
+@media(max-width:680px) {
+ .weekly-detail-heading { flex-direction:column; align-items:flex-start; gap:18px; padding:20px; }
+ .weekly-heading-meta { width:100%; justify-items:start; text-align:left; }
+ .weekly-heading-status-row { box-sizing:border-box; max-width:100%; }
+}
+@media(max-width:380px) {
+ .weekly-heading-status-row { gap:8px; }
+ .weekly-heading-updated { padding-left:0; border-left:0; }
+ .weekly-heading-month { display:block; margin:4px 0 0; }
+}

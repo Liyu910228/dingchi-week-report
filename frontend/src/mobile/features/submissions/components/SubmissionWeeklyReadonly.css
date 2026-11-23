@@ -1,0 +1,2 @@
+.weekly-readonly-panel :deep(.fullscreen-panel__actions) { flex-wrap:nowrap; }
+.weekly-readonly-panel :deep(.fullscreen-panel__actions > .ghost-button) { white-space:nowrap; }

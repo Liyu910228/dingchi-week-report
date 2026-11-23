@@ -1,0 +1,5 @@
+.customer-hero {display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;}
+.customer-heading {display:grid;gap:5px;}
+.customer-heading h2 {margin:0;font-size:20px;color:var(--text-strong);}
+.customer-count {font-size:12px;color:var(--muted);}
+.customer-hero .primary-button {flex-shrink:0;min-height:40px;padding:9px 14px;border-radius:10px;font-size:14px;}

@@ -1,0 +1,24 @@
+.roles-page {
+  display: grid;
+  gap: 1rem;
+}
+
+.page-alert,
+.page-success {
+  margin: 0;
+  padding: 0.78rem 0.95rem;
+  border-radius: 11px;
+  font-size: 0.8rem;
+}
+
+.page-alert {
+  border: 1px solid #ffd0ce;
+  color: #a84343;
+  background: #fff2f1;
+}
+
+.page-success {
+  border: 1px solid #bdeedb;
+  color: #087b54;
+  background: #effcf6;
+}

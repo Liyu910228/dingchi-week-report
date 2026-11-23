@@ -1,0 +1,2 @@
+.leader-trend-chart { width: 100%; height: 198px; }
+.leader-chart-empty { display: grid; height: 198px; place-items: center; color: #8096b5; font-size: 12px; }

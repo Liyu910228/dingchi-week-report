@@ -1,0 +1,6 @@
+interface:
+  display_name: "Python 后端开发规范"
+  short_description: "按分层、连接池、安全与测试规范开发后端"
+  default_prompt: "使用 $backend-python-development-conventions 按后端 Python 开发规范新增、重构或审查这段代码。"
+policy:
+  allow_implicit_invocation: true

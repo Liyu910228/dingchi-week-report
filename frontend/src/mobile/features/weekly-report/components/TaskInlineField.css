@@ -1,0 +1,21 @@
+.inline-field { min-width: 0; min-height: 46px; display: grid; align-items: center; text-align: left; border-radius: 9px; }
+.inline-field__text, .inline-field__editor { grid-area: 1 / 1; min-width: 0; width: 100%; }
+.inline-field__text { display: block; padding: 10px 8px; color: var(--text); line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+.inline-field__editor { visibility: hidden; pointer-events: none; }
+.inline-field:hover .inline-field__editor, .inline-field:focus-within .inline-field__editor { visibility: visible; pointer-events: auto; }
+.inline-field:hover .inline-field__text, .inline-field:focus-within .inline-field__text { visibility: hidden; pointer-events: none; }
+.inline-field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.inline-field__editor > input, .inline-field__editor > select { width: 100%; min-width: 0; box-sizing: border-box; padding: 10px 8px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface-soft); color: var(--text); font: inherit; }
+.inline-field__editor > input:focus, .inline-field__editor > select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.inline-field :deep(.searchable-select__menu) { position: fixed !important; z-index: 1100; left: var(--cell-menu-left) !important; right: auto; top: var(--cell-menu-top) !important; bottom: auto; width: max-content; min-width: var(--cell-control-width) !important; max-width: calc(100vw - 24px); max-height: var(--cell-menu-height); box-sizing: border-box; }
+@media (hover: none) {
+  .inline-field__editor { visibility: visible; pointer-events: auto; }
+  .inline-field__text { visibility: hidden; pointer-events: none; }
+}
+
+.inline-field--readonly .inline-field__text, .inline-field--readonly:hover .inline-field__text, .inline-field--readonly:focus-within .inline-field__text { visibility: visible; pointer-events: auto; }
+
+/* Mobile forms expose controls directly, including when opened on a desktop. */
+.inline-field__editor {visibility:visible;pointer-events:auto;}
+.inline-field:not(.inline-field--readonly) .inline-field__text {visibility:hidden;pointer-events:none;}
+.inline-field--readonly .inline-field__text {visibility:visible;}

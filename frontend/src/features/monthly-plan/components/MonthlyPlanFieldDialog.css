@@ -1,0 +1,2 @@
+.column-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.column-options label { display: flex; align-items: center; gap: 8px; }

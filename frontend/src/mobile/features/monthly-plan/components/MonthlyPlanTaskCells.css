@@ -1,0 +1,12 @@
+td { padding: 13px 16px; border-bottom: 1px solid var(--line); vertical-align: top; text-align: left; }
+.text-cell, .text-value { display: block; width: 100%; min-height: 42px; padding: 8px; color: var(--text); font: inherit; line-height: 1.65; text-align: left; white-space: pre-wrap; overflow-wrap: anywhere; }
+.text-cell { border: 1px solid transparent; border-radius: 8px; background: transparent; cursor: pointer; }
+.text-cell:hover, .text-cell:focus-visible { border-color: var(--line); background: var(--surface-soft); }
+.shared-cell { position: relative; padding-bottom: 42px !important; }
+.cell-insert { position: absolute; right: 8px; bottom: 8px; display: grid; place-items: center; width: 26px; height: 26px; border: 1px solid var(--line); border-radius: 6px; color: var(--accent); background: var(--surface-soft); cursor: pointer; }
+
+/* High-contrast task insertion controls. */
+button.insert-button:has(svg), button.cell-insert:has(svg) { display: inline-grid; place-items: center; min-width: 30px; min-height: 30px; padding: 4px; color: #fff; background: #2875dc; border: 1px solid #1b60bf; border-radius: 7px; box-shadow: 0 2px 5px rgb(32 98 190 / 20%); }
+button.insert-button:has(svg):hover, button.cell-insert:has(svg):hover { color: #fff; background: #195bb7; border-color: #164e9c; }
+button.insert-button:has(svg):focus-visible, button.cell-insert:has(svg):focus-visible { outline: 2px solid #78a9ee; outline-offset: 2px; }
+button.insert-button:has(svg):disabled, button.cell-insert:has(svg):disabled { opacity: .45; box-shadow: none; cursor: not-allowed; }

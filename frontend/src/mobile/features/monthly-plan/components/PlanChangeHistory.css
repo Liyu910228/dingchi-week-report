@@ -1,0 +1,16 @@
+.change-history {padding:14px;min-width:0;}
+.change-history h2 {font-size:20px;margin:0 0 14px;}
+.change-history > details {border:1px solid #c8d9ed;border-radius:12px;margin-top:12px;overflow:hidden;}
+.change-history > details > summary {cursor:pointer;padding:12px;background:#f1f6fd;line-height:1.8;}
+.change-history > details > summary span,.change-history time {margin-left:10px;font-size:14px;color:#7186a5;}
+.change-history > details > summary .history-position {color:var(--accent-dark);font-weight:600;overflow-wrap:anywhere;}
+.version-content {padding:12px 0 0;min-width:0;}
+.version-content > h3,.version-content > p {margin-inline:10px;}
+.version-content p {white-space:pre-wrap;overflow-wrap:anywhere;}
+.version-content h3 {font-size:16px;}
+/* History already provides the enclosing card; avoid stacking card gutters. */
+.version-content :deep(.dashboard-card:not(.fullscreen-panel--expanded)) {padding:12px 0!important;margin-inline:0;border:0;border-radius:0;box-shadow:none;}
+.version-content :deep(.snapshot-tabs) {gap:12px;}
+.version-content :deep(.snapshot-complete--expanded) {padding:0;border:0;}
+.version-content :deep(.fullscreen-panel:not(.fullscreen-panel--expanded) > .fullscreen-panel__header),
+.version-content :deep(.fullscreen-panel:not(.fullscreen-panel--expanded) > .fullscreen-panel__toolbar) {margin-inline:10px;}

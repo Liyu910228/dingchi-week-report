@@ -1,0 +1,12 @@
+/* 通用表格底色：同一合并组整组同色，冻结列与滚动列使用相同底色。 */
+table[data-row-banded] {
+  --row-base: var(--surface-strong);
+  --row-alternate: color-mix(in srgb, var(--accent) 8%, var(--surface-strong));
+  --row-change-draft: color-mix(in srgb, #8896ab 19%, var(--surface-strong));
+  --row-change-pending: color-mix(in srgb, #f4bb42 24%, var(--surface-strong));
+  --row-change-approved: color-mix(in srgb, #31b48a 18%, var(--surface-strong));
+  --row-change-rejected: color-mix(in srgb, #ec7182 19%, var(--surface-strong));
+}
+table[data-row-banded] > tbody > tr[data-row-band]:not([data-row-band="empty"]) > td {
+  background: var(--current-row-background) !important;
+}

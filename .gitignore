@@ -1,0 +1,44 @@
+# IDE and operating system
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/*.local
+
+# Backend
+backend/.venv/
+backend/.pytest_cache/
+backend/.ruff_cache/
+backend/*.egg-info/
+backend/**/__pycache__/
+backend/**/*.py[cod]
+backend/.keys/
+backend/logs/
+backend/.env
+backend/.env.*
+!backend/.env.example
+!backend/.env.production.example
+backend/staticfiles/
+backend/media/
+
+# Local infrastructure data
+.docker-data/
+/.npm-cache
+/.pnpm-store
+/docs
+/skills/weekly-report-consolidator
+/skills/*.zip
+/.workbuddy/memory
+/.workbuddy/deploy
+/scripts
+/backend/docs/数据库脚本
+/backend/docs
+/.ruff_cache
+.tmp*
+
+test-*

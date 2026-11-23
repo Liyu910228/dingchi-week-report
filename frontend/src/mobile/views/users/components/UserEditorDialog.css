@@ -1,0 +1,125 @@
+.user-form {
+  padding: 0.15rem 0;
+}
+
+.form-error {
+  margin: 0 0 1rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid #ffd0ce;
+  border-radius: 10px;
+  color: #a84343;
+  background: #fff2f1;
+  font-size: 0.8rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.2rem;
+}
+
+.form-grid > label,
+.form-grid > .person-field {
+  display: grid;
+  min-width: 0;
+  gap: 0.42rem;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.form-grid input,
+.form-grid select {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.68rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--text);
+  background: var(--surface-soft);
+  outline: none;
+  font: inherit;
+  font-weight: 500;
+}
+
+.form-grid input:focus,
+.form-grid select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(47, 128, 237, 0.12);
+}
+
+.form-grid input:disabled,
+.form-grid select:disabled {
+  color: var(--muted);
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.role-fieldset {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin: 0;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-soft);
+}
+
+.role-fieldset legend {
+  padding: 0 0.25rem;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.role-option {
+  display: inline-flex !important;
+  grid-template-columns: none !important;
+  align-items: center;
+  gap: 0.35rem !important;
+  min-height: 34px;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid #d9e8fb;
+  border-radius: 9px;
+  color: var(--accent-dark) !important;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+}
+
+.role-option:has(input:checked) {
+  border-color: rgba(47, 128, 237, 0.45);
+  background: #eaf3ff;
+}
+
+.role-option input {
+  width: auto;
+  min-height: auto;
+  accent-color: var(--accent);
+}
+
+.role-empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+@media (max-width: 620px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .role-fieldset {
+    grid-column: auto;
+  }
+}
+
+.form-grid {align-items:start;}
+.form-grid > label,.form-grid > .person-field {align-content:start;}
+

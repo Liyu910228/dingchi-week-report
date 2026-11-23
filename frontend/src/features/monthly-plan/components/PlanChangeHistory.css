@@ -1,0 +1,3 @@
+.change-history{padding:24px;min-width:0}.change-history h2{font-size:20px;margin:0 0 18px}.change-history details{border:1px solid #e2eaf5;border-radius:12px;margin-top:12px;overflow:hidden}.change-history summary{cursor:pointer;padding:18px;background:#f7faff;line-height:1.8}.change-history summary span,.change-history time{margin-left:14px;font-size:14px;color:#7186a5}.change-history .current{color:#198a6c}.version-content{padding:18px}.version-content p{white-space:pre-wrap;overflow-wrap:anywhere}.version-content h3{font-size:16px}
+
+.change-history summary .history-position {color:var(--accent-dark);font-weight:600;overflow-wrap:anywhere;}

@@ -1,0 +1,12 @@
+.template-popover { position: fixed; z-index: 1100; display: flex; flex-direction: column; box-sizing: border-box; overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-strong); box-shadow: 8px 12px 32px rgba(20, 64, 119, 0.22); }
+.popover-heading { display: flex; flex-shrink: 0; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); color: var(--text-strong); }
+.popover-close { padding: 2px 8px; border: 0; background: transparent; color: var(--muted); font-size: 24px; cursor: pointer; }
+.popover-list { flex: 1; display: grid; align-content: start; gap: 12px; min-height: 0; overflow-y: auto; padding: 12px; overscroll-behavior: contain; }
+.template-choice { display: flex; align-items: flex-start; gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; }
+.template-choice:hover, .template-choice.selected, .template-choice:focus-within { border-color: var(--accent); background: var(--surface-soft); }
+.template-choice input { margin-top: 5px; flex-shrink: 0; accent-color: var(--accent); }
+.choice-content { display: grid; gap: 12px; min-width: 0; font-size: 0.875rem; line-height: 1.65; }
+.choice-task, .choice-work { display: grid; gap: 6px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.choice-task { color: var(--text-strong); }
+.choice-work { padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); }
+.choice-label { font-size: 0.75rem; font-weight: 600; color: var(--accent-dark); }

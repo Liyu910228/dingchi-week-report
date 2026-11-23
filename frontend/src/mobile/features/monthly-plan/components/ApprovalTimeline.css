@@ -1,0 +1,27 @@
+.approval-timeline { min-width:0; padding:20px; }
+.flow-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:22px; }
+.flow-heading h2 { margin:0; color:var(--text-strong); font-size:1.1rem; }
+.flow-current { flex-shrink:0; padding:4px 8px; border-radius:6px; color:var(--accent-dark); background:#edf5ff; font-size:0.72rem; }
+.approval-timeline ol { margin:0; padding:0; list-style:none; }
+.flow-item { --node-color:#9aaac0; --node-fill:#f6f8fc; --node-line:#dce5f0; position:relative; padding-bottom:30px; }
+.flow-item:last-child { padding-bottom:0; }
+.flow-item:not(:last-child)::before { content:""; position:absolute; left:calc(50% - 1px); bottom:6px; height:24px; width:2px; background:var(--node-line); }
+.flow-item:not(:last-child)::after { content:""; position:absolute; left:calc(50% - 4px); bottom:6px; width:6px; height:6px; border-right:2px solid var(--node-line); border-bottom:2px solid var(--node-line); transform:rotate(45deg); }
+.flow-item--done { --node-color:#15966d; --node-fill:#f0faf5; --node-line:#b8dfcf; }
+.flow-item--current { --node-color:#2879ed; --node-fill:#f2f7ff; --node-line:#bfd8fc; }
+.flow-item--rejected { --node-color:#d4515e; --node-fill:#fff5f5; --node-line:#f1c7cb; }
+.flow-terminal { width:max-content; min-width:80px; box-sizing:border-box; margin:0 auto; padding:6px 20px; border:1px solid var(--node-line); border-radius:999px; background:var(--node-fill); color:var(--node-color); font-size:0.8rem; text-align:center; }
+.flow-item--current .flow-node { border-color:var(--node-color); box-shadow:0 0 0 3px #e6f0ff; }
+.flow-node { min-width:0; padding:12px; border:1px solid var(--node-line); border-radius:10px; background:var(--node-fill); }
+.flow-node-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:12px; }
+.flow-node h3 { margin:0; color:var(--text-strong); font-size:0.9rem; }
+.flow-result { color:var(--node-color); font-size:0.73rem; font-weight:600; }
+.flow-node dl { display:grid; gap:8px; margin:0; font-size:0.75rem; }
+.flow-node dl > div { display:grid; grid-template-columns:56px minmax(0,1fr); gap:6px; }
+.flow-node dt { color:var(--muted); }
+.flow-node dd { margin:0; color:var(--text); overflow-wrap:anywhere; font-variant-numeric:tabular-nums; }
+.flow-node time { font-size:0.7rem; }
+.flow-reason { margin:10px 0 0; padding-top:10px; border-top:1px solid var(--node-line); color:var(--text); font-size:0.75rem; line-height:1.6; overflow-wrap:anywhere; }
+.flow-reason strong { color:var(--node-color); font-weight:600; }
+.flow-reason p { margin:4px 0 0; white-space:pre-wrap; }
+@media(max-width:720px) { .approval-timeline { padding:16px; } }

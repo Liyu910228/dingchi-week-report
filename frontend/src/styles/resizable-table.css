@@ -1,0 +1,18 @@
+:root { --column-resize-cursor-image: url("../assets/cursors/column-resize.svg"); }
+
+table[data-resizable-columns] { isolation: isolate; }
+table[data-resizable-columns] th,
+table[data-resizable-columns] td { border-right: 1px solid var(--table-column-divider, #aac0dc) !important; }
+table[data-resizable-columns] th:last-child,
+table[data-resizable-columns] td:last-child { border-right: 0 !important; }
+.column-resize-handle { position: absolute; top: 0; right: 0; bottom: 0; z-index: 2; width: 8px; cursor: var(--column-resize-cursor-image) 12 12, ew-resize; touch-action: none; user-select: none; }
+/* 提前解码内嵌的小型光标资源，首次悬浮无需等待系统光标切换。 */
+.column-resize-handle::before { position: absolute; width: 1px; height: 1px; opacity: 0; background-image: var(--column-resize-cursor-image); pointer-events: none; content: ""; }
+.column-resize-handle::after { position: absolute; top: 0; bottom: 0; left: 3px; width: 2px; background: var(--accent, #2f80ed); opacity: 0; content: ""; }
+.column-resize-handle:hover::after,
+.column-resize-handle:focus-visible::after { opacity: 1; }
+.column-resize-handle:focus-visible { outline: 1px solid var(--accent, #2f80ed); outline-offset: -2px; }
+html.is-resizing-table-columns,
+html.is-resizing-table-columns *,
+table.is-resizing-columns,
+table.is-resizing-columns * { cursor: var(--column-resize-cursor-image) 12 12, ew-resize !important; user-select: none !important; }

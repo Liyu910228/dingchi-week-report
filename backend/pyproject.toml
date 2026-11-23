@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dingchi-week-report-backend"
+version = "0.1.0"
+description = "Django, MCP, MySQL, Redis and AI backend for DingChi Week Report"
+requires-python = ">=3.12"
+dependencies = [
+  "Django>=6.0,<6.1",
+  "django-db-connection-pool>=1.2,<2",
+  "cryptography>=43,<52",
+  "django-environ>=0.12,<1",
+  "django-redis>=7.0,<8",
+  "httpx>=0.28,<1",
+  "mcp>=2.1,<3",
+  "mysqlclient>=2.2.8,<3",
+  "openai>=3.0,<4",
+  "openpyxl>=3.1,<4",
+  "Pillow>=11,<13",
+  "pypdf>=5,<7",
+  "python-docx>=1.1,<2",
+  "redis>=6.0,<7",
+  "starlette>=0.48,<1",
+  "uvicorn[standard]>=0.35,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.4,<10",
+  "pytest-asyncio>=1.1,<2",
+  "pytest-django>=4.11,<5",
+  "ruff>=0.12,<1",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["apps*", "config*", "utils*"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+python_files = ["test_*.py", "*_tests.py"]
+addopts = "-q"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# Django 生成的迁移文件保持生成器格式，不在业务代码中强制换行或排序导入。
+"apps/*/migrations/*.py" = ["E501", "I001"]

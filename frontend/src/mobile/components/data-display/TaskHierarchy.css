@@ -1,0 +1,43 @@
+.task-hierarchy {gap:14px;}
+.task-hierarchy .task-group {display:block;padding:0;border:1px solid #b4cbea;border-radius:16px;background:var(--surface,white);overflow:hidden;min-width:0;}
+.task-group-heading {display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;padding:12px;list-style:none;cursor:pointer;min-height:52px;background:linear-gradient(100deg,#e4efff 0%,#f4f8ff 100%);box-shadow:inset 3px 0 #568cda;color:#24466f;}
+.task-group-heading::-webkit-details-marker,.task-child-heading::-webkit-details-marker {display:none;}
+.task-number {color:#285b9e;font-size:13px;white-space:nowrap;padding:3px 6px;border:1px solid #c0d5f1;border-radius:5px;background:#f8fbff;}
+.task-group-title {min-width:0;display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.6;}
+.task-group[open] > .task-group-heading {grid-template-columns:auto 1fr;border-bottom:1px solid #c4d7ef;}
+.task-group[open] > .task-group-heading .task-group-title {display:none;}
+.task-group[open] > .task-group-heading .task-disclosure {justify-self:end;}
+.task-disclosure::after {content:'展开';font-size:13px;color:#285b9e;}
+.task-group[open] > .task-group-heading .task-disclosure::after {content:'收起';}
+.task-group-body {padding:0;}
+.task-parent-fields {padding-inline:12px;}
+
+/* Panels share the full content width; only headings carry a tinted surface. */
+.task-content-panel,.task-content-panel > .task-outcome-panel {min-width:0;margin:0;padding:0;border:1px solid #b9cfe9;border-radius:0;background:transparent;}
+.task-content-panel {box-shadow:inset 3px 0 #69a9ac;}
+.task-content-panel > .task-outcome-panel {border-color:#c8d4e2;box-shadow:inset 2px 0 #a4b4c9;}
+.task-child-heading {display:flex;justify-content:space-between;align-items:center;gap:6px;min-height:44px;margin:0;padding:8px 10px;list-style:none;cursor:pointer;font-size:14px;line-height:1.5;color:var(--accent-dark);}
+.task-content-panel > .task-child-heading {background:#e5f2f1;box-shadow:inset 3px 0 #69a9ac;color:#2d6266;}
+.task-outcome-panel > .task-child-heading {background:#f4f6fa;box-shadow:inset 2px 0 #a4b4c9;font-size:13px;color:#4b6079;}
+.task-content-panel[open] > .task-child-heading,.task-outcome-panel[open] > .task-child-heading {border-bottom:1px solid #cfdeef;}
+.task-child-count {margin-left:auto;font-size:12px;color:#496582;white-space:nowrap;}
+.child-disclosure::after {content:'展开';font-size:13px;color:var(--accent-dark);white-space:nowrap;}
+details[open] > .task-child-heading .child-disclosure::after {content:'收起';}
+.outcome-heading-label {display:flex;align-items:center;gap:8px;min-width:0;line-height:1.5;}
+.outcome-number {flex-shrink:0;color:var(--accent-dark);font-size:13px;font-variant-numeric:tabular-nums;}
+.task-outcome-panel > .task-child-heading .child-disclosure {margin-left:auto;}
+
+.task-hierarchy.task-hierarchy :deep([data-card-field]) {gap:4px;padding:8px 0!important;}
+.task-hierarchy.task-hierarchy .task-content-panel :deep([data-card-field]) {padding:8px 10px!important;background:transparent;}
+.task-hierarchy :deep(.text-value),.task-hierarchy :deep(.monthly-task-plain),.task-hierarchy :deep(.outcome-text),.task-hierarchy :deep(.cell-text) {min-height:0;padding:0!important;margin:0;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere;}
+.task-hierarchy :deep(.task-parent-fields .template-task-text) {padding:6px 0;}
+.task-hierarchy :deep([data-card-field]::before) {line-height:1.5;}
+
+
+/* Swipe preserves native summary disclosure and the existing heading layout. */
+.task-group-heading :deep(.swipe-heading-content) {display:grid;grid-template-columns:auto minmax(0,1fr) auto;}
+.task-group[open] > .task-group-heading :deep(.swipe-heading-content) {grid-template-columns:auto 1fr;}
+.task-child-heading :deep(.swipe-heading-content) {min-height:44px;padding:8px 10px;}
+.task-group[open] > .task-group-heading :deep(.task-group-title) {display:none;}
+.task-preview-toggle {display:flex;justify-content:center;}
+.task-preview-toggle button {min-height:40px;padding:8px 16px;border:1px solid var(--line);border-radius:9px;color:var(--accent-dark);background:var(--surface-soft);font:inherit;font-size:14px;cursor:pointer;}

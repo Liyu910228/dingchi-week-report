@@ -1,0 +1,8 @@
+.content-font-control { padding:12px 0; border-top:1px solid var(--line); }
+.content-font-heading { display:flex; align-items:center; gap:10px; color:var(--muted); font-size:13px; }
+.content-font-heading output { margin-left:auto; color:var(--text); font-size:14px; font-weight:400; }
+.content-font-heading button { padding:3px 6px; border:0; background:transparent; color:var(--accent); font:inherit; cursor:pointer; }
+.content-font-slider { display:flex; align-items:center; gap:10px; margin-top:8px; }
+.content-font-slider button { width:30px; height:30px; flex-shrink:0; border:1px solid var(--line); border-radius:7px; background:var(--surface-soft); color:var(--text); font-size:16px; cursor:pointer; }
+.content-font-slider input { flex:1; min-width:0; accent-color:var(--accent); cursor:pointer; }
+.content-font-control button:disabled { opacity:.45; cursor:default; }

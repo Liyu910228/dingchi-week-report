@@ -1,0 +1,25 @@
+.approval-snapshot {
+  display: grid; gap: 16px; min-width: 0;
+  --monthly-plan-table-min-width: 0px;
+  --monthly-plan-scope-width: 18%;
+  --monthly-plan-serial-width: 40px;
+  --monthly-plan-date-width: clamp(90px, 12vw, 160px);
+  --monthly-plan-cell-padding: clamp(6px, 1vw, 14px);
+}
+.snapshot-goal { padding:16px; }
+.snapshot-goal h2 { margin:0 0 12px; font-size:1.1rem; }
+.snapshot-goal p { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; }
+
+.approval-decision{padding:16px;border:1px solid var(--line);border-radius:12px}.approval-decision label{display:grid;gap:10px;font-weight:600}.approval-decision textarea{width:100%;box-sizing:border-box;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-soft);color:var(--text);font:inherit;resize:vertical}.approval-error{color:var(--red);white-space:pre-wrap;}
+
+.approval-meta{display:flex;flex-wrap:wrap;gap:12px 32px;margin:0;padding:0 0 16px;border-bottom:1px solid var(--line);font-size:14px;line-height:1.6;}.approval-meta>div{display:flex;align-items:baseline;gap:10px;min-width:0;}.approval-meta dt{color:var(--muted);white-space:nowrap;}.approval-meta dd{margin:0;color:var(--text);overflow-wrap:anywhere;}.approval-meta time{white-space:nowrap;}
+
+.approval-rejection{padding:12px 16px;border:1px solid var(--line);border-left:3px solid var(--red);border-radius:8px;background:var(--surface-soft);font-size:14px;}.approval-rejection strong{color:var(--red);font-weight:600;}.approval-rejection p{margin:6px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7;}
+
+.approval-change-reason {padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--surface-soft);color:var(--text);}
+.approval-change-reason p {margin:8px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6;}
+
+.full-application {display:grid;gap:18px;min-width:0;}
+.full-application--expanded {padding:16px;border:1px solid var(--line);border-radius:12px;}
+.full-application h3 {margin:0;padding-bottom:14px;border-bottom:1px solid var(--line);color:var(--text-strong);font-size:1rem;}
+.full-application-action {display:flex;justify-content:center;padding:16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface-soft);}
