@@ -7,6 +7,7 @@ import {
   formatAttachmentSize,
   isImageChatAttachment,
   isSupportedChatAttachment,
+  MAX_CHAT_ATTACHMENT_SIZE,
   MAX_CHAT_ATTACHMENTS,
 } from "@/features/chat/attachments"
 
@@ -47,17 +48,41 @@ function syncPreviews(nextFiles: File[]) {
 
 watch(files, syncPreviews, { immediate: true })
 
+function fileFingerprint(file: File) {
+  return `${file.name}:${file.size}:${file.lastModified}`
+}
+
 function addFiles(candidates: File[]) {
   selectionError.value = ""
-  const supported = candidates.filter((file) => isSupportedChatAttachment(file))
-  if (supported.length !== candidates.length) {
-    selectionError.value = "包含不支持的文件类型，请选择图片、PDF、Word、Excel 或文本文件。"
-    return
+  if (props.disabled || !candidates.length) return
+  const existing = new Set(files.value.map(fileFingerprint))
+  const incoming = new Set<string>()
+  const unique = candidates.filter((file) => {
+    const key = fileFingerprint(file)
+    if (existing.has(key) || incoming.has(key)) return false
+    incoming.add(key)
+    return true
+  })
+  const messages: string[] = []
+  if (unique.length !== candidates.length) messages.push("重复文件已跳过")
+
+  const supported = unique.filter((file) => {
+    if (!isSupportedChatAttachment(file)) return false
+    return file.size > 0 && file.size <= MAX_CHAT_ATTACHMENT_SIZE
+  })
+  if (supported.length !== unique.length) {
+    messages.push("不支持的类型、空文件或超过 10MB 的文件已跳过")
   }
-  const remaining = MAX_CHAT_ATTACHMENTS - files.value.length
-  if (candidates.length > remaining) selectionError.value = "最多可选择 4 个附件。"
-  files.value = [...files.value, ...supported.slice(0, Math.max(0, remaining))]
+
+  const remaining = Math.max(0, MAX_CHAT_ATTACHMENTS - files.value.length)
+  const accepted = supported.slice(0, remaining)
+  if (supported.length > remaining) messages.push("最多只能保留 4 个附件")
+  if (accepted.length) files.value = [...files.value, ...accepted]
+  if (messages.length) selectionError.value = `${messages.join("；")}。`
+  if (!accepted.length && !messages.length) selectionError.value = "没有可添加的附件。"
 }
+
+defineExpose({ addFiles })
 
 function handleSelection(event: Event) {
   const input = event.target as HTMLInputElement
@@ -88,7 +113,7 @@ onBeforeUnmount(() => {
       >
         添加附件
       </button>
-      <small>最多 4 个文件，支持图片、PDF、Word、Excel 和文本文件</small>
+      <small>最多 4 个文件，单个不超过 10MB，支持图片、PDF、Word、Excel 和文本文件</small>
     </div>
     <input
       ref="fileInput"

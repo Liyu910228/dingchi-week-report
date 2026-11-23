@@ -6,10 +6,11 @@ import {
   WEEKLY_REPORT_ATTACHMENT_PROMPT,
 } from "@/features/chat/attachments"
 import ChatAttachmentPicker from "@/features/chat/components/ChatAttachmentPicker.vue"
+import { useAttachmentDropZone } from "@/features/chat/useAttachmentDropZone"
 
 const prompt = defineModel<string>({ required: true })
 
-defineProps<{
+const props = defineProps<{
   isSending: boolean
 }>()
 
@@ -18,6 +19,18 @@ const emit = defineEmits<{
 }>()
 
 const selectedFiles = ref<File[]>([])
+const attachmentPicker = ref<InstanceType<typeof ChatAttachmentPicker> | null>(null)
+const {
+  isDragging,
+  handlePaste,
+  handleDragEnter,
+  handleDragOver,
+  handleDragLeave,
+  handleDrop,
+} = useAttachmentDropZone(
+  (files) => attachmentPicker.value?.addFiles(files),
+  () => props.isSending,
+)
 
 function handleSubmit() {
   if ((!prompt.value.trim() && !selectedFiles.value.length)) return
@@ -35,7 +48,16 @@ function handleKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <form class="composer" @submit.prevent="handleSubmit">
+  <form
+    class="composer"
+    :class="{ 'is-dragging': isDragging }"
+    @submit.prevent="handleSubmit"
+    @paste="handlePaste"
+    @dragenter="handleDragEnter"
+    @dragover="handleDragOver"
+    @dragleave="handleDragLeave"
+    @drop="handleDrop"
+  >
     <div class="attachment-shortcuts" aria-label="附件快捷提示词">
       <button
         class="ghost-button"
@@ -55,14 +77,14 @@ function handleKeydown(event: KeyboardEvent) {
       </button>
     </div>
 
-    <ChatAttachmentPicker v-model="selectedFiles" :disabled="isSending" />
+    <ChatAttachmentPicker ref="attachmentPicker" v-model="selectedFiles" :disabled="isSending" />
 
     <div class="composer-input">
       <textarea
         v-model="prompt"
         rows="3"
         maxlength="20000"
-        placeholder="输入消息，或添加图片和文档；Enter 发送，Shift + Enter 换行"
+        placeholder="输入消息，Ctrl+V 粘贴截图/文件，或拖入图片和文档；Enter 发送"
         :disabled="isSending"
         @keydown="handleKeydown"
       />
@@ -74,6 +96,10 @@ function handleKeydown(event: KeyboardEvent) {
         {{ isSending ? "发送中" : "发送" }}
       </button>
     </div>
+    <div v-if="isDragging" class="drop-zone-message" role="status">
+      松开鼠标，将文件添加到当前消息
+    </div>
+    <small v-else class="composer-input-hint">支持粘贴或拖入文件，单个不超过 10MB</small>
   </form>
 </template>
 

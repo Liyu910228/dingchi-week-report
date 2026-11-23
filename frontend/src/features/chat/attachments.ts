@@ -1,6 +1,7 @@
 export const CHAT_ATTACHMENT_ACCEPT =
   "image/png,image/jpeg,image/webp,image/gif,.pdf,.docx,.xlsx,.txt,.md,.csv,.json"
 export const MAX_CHAT_ATTACHMENTS = 4
+export const MAX_CHAT_ATTACHMENT_SIZE = 10 * 1024 * 1024
 export const DEFAULT_ATTACHMENT_PROMPT =
   "请阅读附件内容，提取工作事项、进展、风险和后续计划，并整理成周报草稿。"
 export const WEEKLY_REPORT_ATTACHMENT_PROMPT =
