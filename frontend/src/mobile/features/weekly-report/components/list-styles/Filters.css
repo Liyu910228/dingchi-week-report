@@ -1,0 +1,166 @@
+.report-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid #e2edf9;
+  border-radius: 13px;
+  background: #f8fbff;
+}
+
+.report-filter-bar label {
+  display: grid;
+  min-width: 160px;
+  gap: 0.3rem;
+  color: var(--muted);
+  font-size: 0.74rem;
+}
+
+.report-filter-bar .period-range-field {
+  width: 180px;
+  min-width: 180px;
+  flex: 0 0 180px;
+}
+
+.report-filter-bar .group-filter {
+  width: 180px;
+  min-width: 180px;
+  flex: 0 0 180px;
+}
+
+.report-filter-bar .group-filter :deep(.group-tree-select__trigger) {
+  min-height: 40px;
+  padding: 0.5rem 0.65rem;
+  border-radius: 9px;
+  background: #fff;
+  font-size: inherit;
+}
+
+.report-filter-bar input,
+.report-filter-bar select {
+  min-height: 40px;
+  box-sizing: border-box;
+  border: 1px solid #d7e6f8;
+  border-radius: 9px;
+  padding: 0.5rem 0.65rem;
+  color: var(--text);
+  background: #fff;
+  font: inherit;
+}
+
+.report-filter-bar input:focus,
+.report-filter-bar select:focus {
+  border-color: var(--accent);
+  outline: 3px solid rgba(47, 128, 237, 0.13);
+}
+
+.period-range-picker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  box-sizing: border-box;
+  border: 1px solid #d7e6f8;
+  border-radius: 9px;
+  padding: 0 0.65rem;
+  color: var(--text);
+  background: #fff;
+}
+
+.period-range-picker__display {
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  color: var(--text);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.period-range-picker__trigger {
+  width: 100%;
+  min-height: 38px;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.period-range-picker__trigger:focus-visible {
+  outline: 0;
+}
+
+.period-range-picker__input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.period-range-picker:focus-within {
+  border-color: var(--accent);
+  outline: 3px solid rgba(47, 128, 237, 0.13);
+}
+
+.period-range-picker output {
+  font: inherit;
+}
+
+.report-filter-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.report-filter-actions .primary-button,
+.report-filter-actions .ghost-button {
+  min-height: 40px;
+}
+
+@media (max-width: 680px) {
+  .report-filter-bar label {
+    min-width: min(100%, 220px);
+    flex: 1 1 100%;
+  }
+
+  .report-filter-actions {
+    width: 100%;
+  }
+
+  .report-filter-bar .period-range-field {
+    width: auto;
+    min-width: min(100%, 260px);
+    flex: 1 1 100%;
+  }
+
+  .report-filter-bar .group-filter {
+    width: auto;
+    min-width: min(100%, 260px);
+    flex: 1 1 100%;
+  }
+
+  .period-range-picker {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: 0.45rem 0.65rem;
+  }
+
+  .period-range-picker input {
+    width: 100%;
+  }
+
+  .report-filter-actions button {
+    flex: 1;
+  }
+}
+
+.report-filter-bar .person-filter { width:220px; min-width:180px; }

@@ -1,0 +1,7 @@
+.month-week { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; min-width: 0; background: var(--surface); }
+.month-week-heading { display: flex; width: 100%; justify-content: space-between; gap: 12px; text-align: left; padding: 18px; background: var(--surface-soft); border: 0; color: var(--text); font: inherit; cursor: pointer; }
+.month-missing { padding: 16px; color: var(--muted); }
+.month-week-heading { align-items: center; }
+.month-week-summary { display: flex; flex: 1; flex-wrap: wrap; align-items: center; gap: 10px; min-width: 0; }
+.month-week-summary .status-pill { flex-shrink: 0; }
+.month-week-toggle { flex-shrink: 0; margin-left: auto; color: var(--accent-dark); }

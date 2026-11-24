@@ -1,0 +1,9 @@
+.month-detail { display: grid; gap: var(--panel-stack-gap); min-width: 0; }
+.month-heading { padding: 20px; margin: 0; }
+.month-heading h1 { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.month-role-workspace { display: grid; gap: var(--panel-stack-gap); padding: 20px; min-width: 0; }
+.month-task-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.month-task-heading h2 { margin: 0; }
+.month-actions { display: flex; gap: 10px; }
+.month-empty { color: var(--muted); padding: 12px 0; margin: 0; }
+.month-role-workspace, .month-heading { padding: 12px; }

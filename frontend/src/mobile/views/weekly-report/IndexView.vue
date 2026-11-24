@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue"
+import MonthReportList from "@/mobile/features/monthly-weekly-report/MonthReportList.vue"
 import { useRoute, useRouter } from "vue-router"
 import ScrollableTabs from "@/mobile/components/navigation/ScrollableTabs.vue"
 import SharedReportsSection from "./components/SharedReportsSection.vue"
@@ -15,13 +16,14 @@ const route = useRoute(), router = useRouter()
 const hasTeam = computed(() => authStore.effectiveRole?.scope === "team" || (authStore.effectiveRole?.scope === "all" && authStore.reportingRoles.length > 0))
 const allOnly = computed(() => authStore.effectiveRole?.scope === "all" && !authStore.reportingRoles.length)
 const sharedTab = computed({
- get: () => route.query.tab === "shared" ? "shared" : hasTeam.value && route.query.tab === "team" ? "team" : allOnly.value ? "all" : "self",
+ get: () => route.query.tab === "monthly" ? "monthly" : route.query.tab === "shared" ? "shared" : hasTeam.value && route.query.tab === "team" ? "team" : allOnly.value ? "all" : "self",
  set: (tab:string) => { void router.replace({query:{...route.query,tab,employee_id:undefined,group_id:undefined,page:undefined}}) },
 })
 const tabs = computed(() => [
  {id:allOnly.value ? "all" : "self",name:allOnly.value ? "全员周报" : "我的周报"},
  ...(hasTeam.value ? [{id:"team",name:"团队周报"}] : []),
  {id:"shared",name:"共享周报"},
+ {id:"monthly",name:"月度周报"},
 ])
 const reportPage = computed(() => {
   const scope = authStore.effectiveRole?.scope
@@ -35,6 +37,7 @@ const reportPage = computed(() => {
   <div v-if="authStore.isAuthenticated" class="dashboard-card weekly-workspace">
     <div class="weekly-workspace-tabs"><ScrollableTabs v-model="sharedTab" :items="tabs" /><div id="weekly-list-create-action" class="weekly-list-create-action" /></div>
     <SharedReportsSection v-if="sharedTab==='shared'" :key="authStore.user?.id" />
+    <MonthReportList v-else-if="sharedTab==='monthly'" :key="`${authStore.user?.id}:${authStore.effectiveRole?.role_code}`" />
     <component v-else :is="reportPage" />
   </div>
 </template>

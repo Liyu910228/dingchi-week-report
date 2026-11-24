@@ -1,0 +1,4 @@
+@import "@/mobile/features/weekly-report/components/list-styles/Table.css";
+.month-report-card { cursor: pointer; }
+.month-report-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.month-report-card:active { filter: brightness(0.97); }

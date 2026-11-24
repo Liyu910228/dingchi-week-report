@@ -22,6 +22,7 @@ const isSecondaryPage = computed(() => [
   "weekly-report-new",
   "weekly-report-edit",
   "weekly-report-detail",
+  "weekly-report-month-detail",
   "monthly-plan-new",
   "monthly-plan-edit",
   "monthly-plan-detail",
@@ -31,6 +32,9 @@ const isSecondaryPage = computed(() => [
 ].includes(String(route.name)))
 const isSystemAdmin = computed(() => authStore.effectiveRole?.role_code === "system_admin")
 const secondaryBackLocation = computed(() => {
+  if (route.name === "weekly-report-month-detail") {
+    return { name: "weekly-reports", query: { tab: "monthly" } }
+  }
   if (String(route.name).startsWith("monthly-plan")) {
     const tab = route.query.tab
     return {

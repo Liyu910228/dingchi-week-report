@@ -46,6 +46,8 @@ addopts = "-q"
 [tool.ruff]
 target-version = "py312"
 line-length = 100
+# vendor/ 为第三方引入的 vendored 代码（auto-ontology），不参与本仓库 lint。
+extend-exclude = ["vendor"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]

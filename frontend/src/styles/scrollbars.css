@@ -1,0 +1,29 @@
+/* 所有内容滚动容器使用同一规则；标签导航显式隐藏滚动条的规则保持优先。 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* 旧版 WebKit 使用同一套主题令牌。支持标准属性的浏览器由原生控件处理悬浮态。 */
+@supports not (scrollbar-width: thin) {
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-track,
+  *::-webkit-scrollbar-corner {
+    background: var(--scrollbar-track);
+  }
+  *::-webkit-scrollbar-thumb {
+    border: 2px solid var(--scrollbar-track);
+    border-radius: 999px;
+    background: var(--scrollbar-thumb);
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+  }
+}
+
+@media (forced-colors: active) {
+  * { scrollbar-color: auto; }
+}

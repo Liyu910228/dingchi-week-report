@@ -10,3 +10,11 @@ table[data-row-banded] {
 table[data-row-banded] > tbody > tr[data-row-band]:not([data-row-band="empty"]) > td {
   background: var(--current-row-background) !important;
 }
+
+/* 手机列表以 tr 绘制渐变卡片；单元格透明，避免表格条纹盖住整卡背景。
+   仅作用于明确声明卡片布局的列表，任务明细表继续保留奇偶行底色。 */
+@media (max-width: 767px) {
+  table[data-row-banded][data-mobile-cards] > tbody > tr[data-row-band]:not([data-row-band="empty"]) > td {
+    background: transparent !important;
+  }
+}

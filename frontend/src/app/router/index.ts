@@ -8,6 +8,7 @@ import { mobileRoutes } from "./mobile"
 import { isMobileDevice, mobilePath } from "@/shared/utils/device-routing"
 
 const routes: RouteRecordRaw[] = [
+  {path:"/weekly-reports/monthly/:employeeId/:monthKey",name:"weekly-report-month-detail",component:()=>import("@/views/weekly-report/MonthDetailView.vue"),meta:{title:"月度周报",requiresAuth:true}},
   {path:"/monthly-plans/:planId/change",name:"monthly-plan-change-new",component:()=>import("@/views/monthly-plan/EditView.vue"),meta:{title:"填写月度计划变更",requiresAuth:true}},
   { path: "/reporting-position", name: "reporting-position", redirect: to => ({name:to.query.target === "monthly-plan-new"?"monthly-plan-new":"weekly-report-new"}) },
   {path:"/monthly-plans/changes/:changeId/edit",name:"monthly-plan-change-edit",component:()=>import("@/views/monthly-plan/EditView.vue"),meta:{title:"填写月度计划变更",requiresAuth:true}},

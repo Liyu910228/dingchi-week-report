@@ -9,8 +9,6 @@
     linear-gradient(90deg, rgba(231, 241, 253, 0.42) 1px, transparent 1px),
     #fbfdff;
   background-size: 24px 24px;
-  scrollbar-color: #a9c8ed transparent;
-  scrollbar-width: thin;
 }
 
 .organization-chart__canvas {

@@ -1,5 +1,5 @@
 .customer-selection :deep(.searchable-select__control) {align-items:center;}
-.customer-selection :deep(.searchable-select__chips) {max-width:100%;max-height:88px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;}
+.customer-selection :deep(.searchable-select__chips) {max-width:100%;max-height:88px;overflow-y:auto;overscroll-behavior:contain;}
 .customer-selection :deep(.searchable-select__input) {flex:1 1 0;width:0;min-width:0;min-height:26px;}
 .customer-selection :deep(.searchable-select__chip) {overflow-wrap:anywhere;}
 .customer-selection :deep(.searchable-select__chip button) {flex-shrink:0;}

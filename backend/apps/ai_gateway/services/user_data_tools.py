@@ -10,7 +10,8 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from apps.accounts.manager_dao import ordered_manager_ids
 from apps.accounts.models import (
@@ -66,7 +67,8 @@ TOOLS_SCHEMA: list[dict[str, Any]] = [
                 "properties": {
                     "month_key": {
                         "type": "string",
-                        "description": "限定查询的月份，格式 YYYY-MM，例如 2026-11；不传则返回全部。",
+                        "description": "限定查询的月份，格式 YYYY-MM，例如 2026-11；"
+                        "不传则返回全部。",
                     }
                 },
                 "required": [],
@@ -89,7 +91,8 @@ TOOLS_SCHEMA: list[dict[str, Any]] = [
                 "properties": {
                     "month_key": {
                         "type": "string",
-                        "description": "限定查询的月份，格式 YYYY-MM，例如 2026-11；不传则返回最近若干周。",
+                        "description": "限定查询的月份，格式 YYYY-MM，例如 2026-11；"
+                        "不传则返回最近若干周。",
                     }
                 },
                 "required": [],
@@ -132,7 +135,8 @@ TOOLS_SCHEMA: list[dict[str, Any]] = [
                 "properties": {
                     "month_key": {
                         "type": "string",
-                        "description": "限定查询的月份，格式 YYYY-MM，例如 2026-11；不传则返回全部。",
+                        "description": "限定查询的月份，格式 YYYY-MM，例如 2026-11；"
+                        "不传则返回全部。",
                     }
                 },
                 "required": [],
@@ -154,7 +158,8 @@ TOOLS_SCHEMA: list[dict[str, Any]] = [
                 "properties": {
                     "month_key": {
                         "type": "string",
-                        "description": "限定查询的月份，格式 YYYY-MM，例如 2026-11；不传则返回全部。",
+                        "description": "限定查询的月份，格式 YYYY-MM，例如 2026-11；"
+                        "不传则返回全部。",
                     },
                     "member_name": {
                         "type": "string",
@@ -182,11 +187,13 @@ TOOLS_SCHEMA: list[dict[str, Any]] = [
                 "properties": {
                     "month_key": {
                         "type": "string",
-                        "description": "限定查询的月份，格式 YYYY-MM，例如 2026-11；不传则返回最近若干周。",
+                        "description": "限定查询的月份，格式 YYYY-MM，例如 2026-11；"
+                        "不传则返回最近若干周。",
                     },
                     "member_name": {
                         "type": "string",
-                        "description": "下属成员姓名；传入时只返回该成员的周报详情（含任务条目明细）。",
+                        "description": "下属成员姓名；传入时只返回该成员的周报"
+                        "详情（含任务条目明细）。",
                     },
                 },
                 "required": [],
@@ -236,10 +243,16 @@ def _plan_task_rows(employee_id: int, role_code: str, month_key: str) -> list[di
 def _plan_dicts(
     employee_id: int, month_key: str | None, include_tasks: bool = True
 ) -> list[dict[str, Any]]:
-    queryset = MonthlyPlan.objects.filter(employee_id=employee_id).order_by("-month_key", "role_code")
+    queryset = MonthlyPlan.objects.filter(employee_id=employee_id).order_by(
+        "-month_key", "role_code"
+    )
     if month_key:
         queryset = queryset.filter(month_key=month_key)
-    plans = list(queryset.values("month_key", "role_code", "status", "revision", "summary", "rejection_reason")[:MAX_PLANS])
+    plans = list(
+        queryset.values(
+            "month_key", "role_code", "status", "revision", "summary", "rejection_reason"
+        )[:MAX_PLANS]
+    )
     if not plans:
         return []
 
@@ -446,8 +459,12 @@ def _weekly_report_dicts(
                         "序号": item["sort_order"],
                         "任务": _clip(item["task_name_snapshot"]),
                         "工作内容": _clip(item["work_content"]),
-                        "进度": str(item["progress_percent"]) if item["progress_percent"] is not None else "",
-                        "完成率": str(item["completion_rate"]) if item["completion_rate"] is not None else "",
+                        "进度": str(item["progress_percent"])
+                        if item["progress_percent"] is not None
+                        else "",
+                        "完成率": str(item["completion_rate"])
+                        if item["completion_rate"] is not None
+                        else "",
                         "状态": item["on_time_status"],
                         "下一步": _clip(item["next_action"], 100),
                     }
@@ -457,7 +474,9 @@ def _weekly_report_dicts(
                     "概述": _clip(report["summary"]),
                     "风险原因": _clip(report["risk_reason"]) if report["risk_reason"] else "",
                     "下一步": _clip(report["next_action"], 100) if report["next_action"] else "",
-                    "需支持事项": _clip(report["support_needed"], 100) if report["support_needed"] else "",
+                    "需支持事项": _clip(report["support_needed"], 100)
+                    if report["support_needed"]
+                    else "",
                     "任务条目": item_list,
                 }
             )
@@ -508,7 +527,8 @@ def get_team_monthly_reports(
         member = members.first()
         if member is None:
             return {
-                "error": f"团队中没有名为「{member_name}」的在职成员（团队共 {len(member_ids)} 人）。"
+                "error": f"团队中没有名为「{member_name}」的在职成员"
+                f"（团队共 {len(member_ids)} 人）。"
             }
         plans = _plan_dicts(member["id"], month_key, include_tasks=True)
         return {
@@ -579,7 +599,8 @@ def get_team_weekly_reports(
         )
         if member is None:
             return {
-                "error": f"团队中没有名为「{member_name}」的在职成员（团队共 {len(member_ids)} 人）。"
+                "error": f"团队中没有名为「{member_name}」的在职成员"
+                f"（团队共 {len(member_ids)} 人）。"
             }
         reports = _weekly_report_dicts(member["id"], month_key, include_items=True)
         return {

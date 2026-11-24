@@ -106,7 +106,7 @@ const resizeKey = useUserTableResizeKey(() => `weekly-report:${props.scope}`)
     <ConfirmDialog :open="Boolean(restoring)" :busy="restoreBusy" title="恢复周报编辑"
       :message="`确认将${restoring?.employee_name || '该用户'} ${formatPeriod(restoring?.period_start || '',restoring?.period_end || '')}的周报恢复为进行中？恢复后，用户可以修改并重新提交。`"
       confirm-label="恢复编辑" @close="!restoreBusy && (restoring=null)" @confirm="confirmRestore" />
-    <table v-row-backgrounds v-resizable-columns="resizeKey" class="report-list-table">
+    <table data-mobile-cards v-row-backgrounds v-resizable-columns="resizeKey" class="report-list-table">
       <thead>
         <tr>
           <th data-column-key="period">周报周期</th>

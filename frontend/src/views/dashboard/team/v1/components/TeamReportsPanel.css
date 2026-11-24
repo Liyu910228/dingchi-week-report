@@ -25,7 +25,7 @@ button.team-table-row { width: 100%; cursor: pointer; }
 .focus-progress b { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg,#2f88ef,#10ba8a); }
 .focus-progress strong { color: #17355f; font-size: 10px; }
 .team-plan-note { color: #6e8db2; font-size: 11px; }
-.team-plan-timeline { position: relative; display: flex; gap: 10px; min-height: 92px; margin-top: 8px; padding: 4px 2px 8px; overflow-x: auto; overflow-y: hidden; scrollbar-color: #9bc8f4 transparent; scrollbar-width: thin; }
+.team-plan-timeline { position: relative; display: flex; gap: 10px; min-height: 92px; margin-top: 8px; padding: 4px 2px 8px; overflow-x: auto; overflow-y: hidden; }
 .team-plan-timeline::before { position: absolute; top: 20px; right: 18px; left: 18px; height: 3px; border-radius: 99px; background: linear-gradient(90deg,#b8d9ff,#acd8ff); content: ""; }
 .team-plan-step { position: relative; display: grid; width: 190px; min-width: 190px; grid-template-columns: 35px minmax(0,1fr); align-items: start; gap: 8px; padding: 0 8px 7px 0; border: 0; background: transparent; font: inherit; text-align: left; cursor: pointer; }
 .team-plan-node { position: relative; z-index: 1; display: grid; width: 35px; height: 35px; place-items: center; border: 2px solid #fff; border-radius: 50%; color: #fff; background: linear-gradient(135deg,#2585ec,#55b9ff); box-shadow: 0 4px 10px rgba(40,133,232,.24); font-size: 10px; font-weight: 800; }

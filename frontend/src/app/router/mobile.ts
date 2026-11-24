@@ -1,6 +1,7 @@
 import type { RouteRecordRaw } from "vue-router"
 
 export const mobileRoutes: RouteRecordRaw[] = [
+  {path:"/mobile/weekly-reports/monthly/:employeeId/:monthKey",name:"mobile-weekly-report-month-detail",component:()=>import("@/mobile/views/weekly-report/MonthDetailView.vue"),meta:{title:"月度周报",requiresAuth:true,mobile:true}},
   {path:"/mobile/monthly-plans/:planId/change",name:"mobile-monthly-plan-change-new",component:()=>import("@/mobile/views/monthly-plan/EditView.vue"),meta:{mobile:true,title:"填写月度计划变更",requiresAuth:true}},
   { path: "/mobile/reporting-position", name: "mobile-reporting-position", redirect: to => ({name:to.query.target === "mobile-monthly-plan-new"?"mobile-monthly-plan-new":"mobile-weekly-report-new"}) },
   {path:"/mobile/monthly-plans/changes/:changeId/edit",name:"mobile-monthly-plan-change-edit",component:()=>import("@/mobile/views/monthly-plan/EditView.vue"),meta:{mobile:true,title:"填写月度计划变更",requiresAuth:true}},

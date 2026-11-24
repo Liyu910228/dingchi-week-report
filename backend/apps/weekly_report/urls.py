@@ -1,12 +1,19 @@
 from django.urls import path
 
+from . import monthly_overview_views, submission_views, views
 from . import monthly_plan_management_views as monthly_views
-from . import submission_views, views
-from .monthly_plan_task_views import monthly_plan_task_list_view, monthly_plan_task_progress_view
+from .monthly_plan_task_views import (
+    monthly_plan_task_list_view,
+    monthly_plan_task_progress_view,
+)
 
 app_name = "weekly_report"
 
 urlpatterns = [
+    path("monthly-weekly-reports/", monthly_overview_views.overview),
+    path(
+        "monthly-weekly-reports/<str:employee_id>/<str:month_key>/", monthly_overview_views.overview
+    ),
     path("report-submissions/approvals/<str:approval_id>/", submission_views.approval_resource),
     path(
         "report-submissions/approvals/<str:approval_id>/decide/",

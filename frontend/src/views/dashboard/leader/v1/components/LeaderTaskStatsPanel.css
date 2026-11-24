@@ -18,7 +18,7 @@
 .leader-group-stat__track, .leader-member-stat__progress { height: 5px; overflow: hidden; border-radius: 99px; background: #dce9f6; }
 .leader-group-stat__track i, .leader-member-stat__progress i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #378cf0, #13b891); }
 .leader-group-stat small { overflow: hidden; color: #8299b8; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
-.leader-member-stats { display: block; height:360px; overflow: auto; scrollbar-width:thin; scrollbar-color:#9bc8f4 transparent; border: 1px solid #e2edf9; border-radius: 11px; }
+.leader-member-stats { display: block; height:360px; overflow: auto; border: 1px solid #e2edf9; border-radius: 11px; }
 .leader-member-stats__head, .leader-member-stat { display: grid; grid-template-columns: minmax(120px, 1.1fr) minmax(90px, .7fr) minmax(180px, 1.8fr) minmax(135px, 1fr) minmax(120px, .9fr); align-items: center; gap: 10px; min-width: 720px; padding: 9px 11px; }
 .leader-member-stats__head { color: #6e8bb2; background: #eef5fd; font-size: 11px; font-weight: 700; }
 .leader-member-stat { width: 100%; border: 0; border-top: 1px solid #e7f0f9; background: rgba(255, 255, 255, .8); font: inherit; text-align: left; }
@@ -38,4 +38,4 @@
 @media (max-width: 1150px) { .leader-group-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 720px) { .leader-group-stats { grid-template-columns: 1fr; } .leader-task-stats-panel { padding: 14px; } }
 
-.leader-group-stat{cursor:pointer}.leader-group-stat.is-selected{border-color:#368aeb;background:linear-gradient(135deg,#eef7ff,#e0efff);box-shadow:0 0 0 1px #368aeb26}.leader-group-stat:focus-visible{outline:2px solid #368aeb;outline-offset:2px}.leader-member-stats__head{position:sticky;top:0;z-index:1}.leader-group-stats{max-height:260px;overflow-y:auto;scrollbar-width:thin}
+.leader-group-stat{cursor:pointer}.leader-group-stat.is-selected{border-color:#368aeb;background:linear-gradient(135deg,#eef7ff,#e0efff);box-shadow:0 0 0 1px #368aeb26}.leader-group-stat:focus-visible{outline:2px solid #368aeb;outline-offset:2px}.leader-member-stats__head{position:sticky;top:0;z-index:1}.leader-group-stats{max-height:260px;overflow-y:auto;}

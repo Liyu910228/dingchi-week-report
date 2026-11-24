@@ -12,6 +12,10 @@ const route = useRoute()
 const router = useRouter()
 const showBack = computed(() => !route.meta.public && !links.value.some(link => link.path === route.path))
 function goBack() {
+  if (route.name === "mobile-weekly-report-month-detail") {
+    void router.push({ name: "mobile-weekly-reports", query: { tab: "monthly" } })
+    return
+  }
   const previous = router.options.history.state.back
   if (typeof previous === "string" && previous.startsWith("/mobile") && !previous.startsWith("/mobile/login")) { router.back(); return }
   const path = route.path.startsWith("/mobile/monthly-plans/") ? "/mobile/monthly-plans" : route.path.startsWith("/mobile/weekly-reports/") ? "/mobile/weekly-reports" : "/mobile"

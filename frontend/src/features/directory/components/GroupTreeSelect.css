@@ -52,8 +52,6 @@
   border-radius: 12px;
   background: #fff;
   box-shadow: 0 14px 34px rgba(34, 84, 148, 0.18);
-  scrollbar-color: #abc9eb transparent;
-  scrollbar-width: thin;
 }
 
 .group-tree-select__empty,
