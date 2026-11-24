@@ -1,10 +1,10 @@
 -- DingChi 周报系统 MySQL 建表脚本
--- 版本：与当前 Django 模型及内置组件同步（2026-10-30，accounts.0008 / weekly_report.0023）
+-- 版本：与当前 Django 模型及内置组件同步（2026-11-24，ai_gateway 0001~0004 / weekly_report 0024）
 --
 -- 使用说明：
 -- 1. 本脚本只负责创建当前项目已知表，不创建数据库、不执行迁移。
 -- 2. 所有 CREATE TABLE 均使用 IF NOT EXISTS；已有表不会被修改。
---    存量库按缺失项执行27目录、28及29增量SQL，不能仅重跑本文件。
+--    存量库按缺失表逐张执行对应 CREATE TABLE 语句，不能仅重跑本文件。
 -- 3. 业务表的关联字段均为逻辑 BIGINT ID，不创建外键；Django 框架表的外键
 --    是框架自身权限/后台功能所需约束，不属于业务表关联。
 -- 4. 业务主键由应用层雪花算法生成；日期时间统一使用 DATETIME(6)，不使用 BIGINT。
@@ -299,6 +299,87 @@ CREATE TABLE IF NOT EXISTS `system_attachment` (
     KEY `idx_system_attachment_relation` (`attachment_type`, `relation_id`, `relation_sub_id`),
     KEY `idx_system_attachment_type` (`attachment_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统通用附件表';
+
+-- ---- AI 网关表（ai_gateway 0001~0004，2026-11-24 新增） ----
+
+CREATE TABLE IF NOT EXISTS `ai_model_config` (
+    `id` BIGINT NOT NULL COMMENT '雪花算法主键ID',
+    `model` VARCHAR(128) NOT NULL COMMENT '对话模型名称，如 gpt-4o、deepseek-chat',
+    `vision_model` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '视觉模型名称，空串表示未配置',
+    `base_url` VARCHAR(500) NOT NULL DEFAULT '' COMMENT 'OpenAI 兼容接口地址，空串使用内置默认',
+    `api_key` LONGTEXT NOT NULL COMMENT 'RSA-OAEP-SHA256 加密后的接口密钥密文',
+    `is_enabled` BOOL NOT NULL DEFAULT 1 COMMENT '是否启用：1启用、0停用',
+    `last_test_status` VARCHAR(16) NOT NULL DEFAULT '' COMMENT '最近连通性测试状态：ok、fail、空为未测试',
+    `last_test_message` VARCHAR(500) NOT NULL DEFAULT '' COMMENT '最近连通性测试结果说明',
+    `last_tested_at` DATETIME(6) NULL COMMENT '最近连通性测试时间',
+    `updated_by_id` BIGINT NULL COMMENT '最后更新人用户ID，逻辑关联 user_account.id',
+    `created_at` DATETIME(6) NOT NULL COMMENT '创建时间',
+    `updated_at` DATETIME(6) NOT NULL COMMENT '最后更新时间',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='AI 模型配置表（全局单行配置，对话/视觉模型）';
+
+CREATE TABLE IF NOT EXISTS `ai_chat_attachment` (
+    `id` BIGINT NOT NULL COMMENT '雪花算法主键ID',
+    `uploader_id` BIGINT NOT NULL COMMENT '上传人用户ID，逻辑关联 user_account.id',
+    `original_name` VARCHAR(255) NOT NULL COMMENT '用户上传的原始文件名',
+    `storage_name` VARCHAR(255) NOT NULL COMMENT '文件存储名，相对 MEDIA_ROOT 的唯一路径',
+    `mime_type` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '文件 MIME 类型',
+    `file_size` BIGINT NOT NULL DEFAULT 0 COMMENT '文件大小，单位字节',
+    `kind` VARCHAR(16) NOT NULL COMMENT '附件类别：image图片、document文档',
+    `extracted_text` LONGTEXT NOT NULL COMMENT '文档解析后的纯文本内容，用于对话上下文',
+    `extraction_provider` VARCHAR(16) NOT NULL DEFAULT '' COMMENT '文本解析服务商：paddleocr、mineru、baidu，空串表示未解析',
+    `extraction_key_id` BIGINT NULL COMMENT '解析所用 OCR 密钥ID，逻辑关联 ai_ocr_key.id',
+    `created_at` DATETIME(6) NOT NULL COMMENT '创建时间',
+    `updated_at` DATETIME(6) NOT NULL COMMENT '最后更新时间',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uq_ai_chat_attachment_storage_name` (`storage_name`),
+    KEY `idx_ai_attachment_owner` (`uploader_id`, `id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='AI 对话附件表（上传文件与解析文本）';
+
+CREATE TABLE IF NOT EXISTS `ai_ocr_key` (
+    `id` BIGINT NOT NULL COMMENT '雪花算法主键ID',
+    `provider` VARCHAR(16) NOT NULL COMMENT 'OCR 服务商：paddleocr、mineru、baidu',
+    `label` VARCHAR(80) NOT NULL DEFAULT '' COMMENT '密钥备注名称',
+    `api_key` LONGTEXT NOT NULL COMMENT 'RSA-OAEP-SHA256 加密后的接口密钥密文',
+    `is_enabled` BOOL NOT NULL DEFAULT 1 COMMENT '是否启用：1启用、0停用',
+    `last_used_at` DATETIME(6) NULL COMMENT '最近使用时间',
+    `last_status` VARCHAR(16) NOT NULL DEFAULT '' COMMENT '最近调用状态：ok、fail、空为未使用',
+    `last_error` VARCHAR(300) NOT NULL DEFAULT '' COMMENT '最近调用错误信息',
+    `use_count` BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '累计调用次数',
+    `created_by_id` BIGINT NULL COMMENT '创建人用户ID，逻辑关联 user_account.id',
+    `created_at` DATETIME(6) NOT NULL COMMENT '创建时间',
+    `updated_at` DATETIME(6) NOT NULL COMMENT '最后更新时间',
+    PRIMARY KEY (`id`),
+    KEY `idx_ai_ocr_key_enabled` (`provider`, `is_enabled`),
+    KEY `idx_ai_ocr_key_is_enabled` (`is_enabled`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='OCR 密钥池表（按服务商轮询可用密钥）';
+
+-- ---- 月度计划任务进度表（weekly_report 0024，2026-11-24 新增） ----
+
+CREATE TABLE IF NOT EXISTS `monthly_plan_task_progress` (
+    `id` BIGINT NOT NULL COMMENT '雪花算法主键ID',
+    `task_id` BIGINT NOT NULL COMMENT '月度计划任务ID，逻辑关联 monthly_plan_task.id；一任务一行',
+    `data_json` LONGTEXT NOT NULL COMMENT '进度数据 JSON 快照（随进度卡片结构演进）',
+    `revision` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '进度版本号，每次保存自增',
+    `updated_by` BIGINT NOT NULL COMMENT '最后更新人用户ID，逻辑关联 user_account.id',
+    `created_at` DATETIME(6) NOT NULL COMMENT '创建时间',
+    `updated_at` DATETIME(6) NOT NULL COMMENT '最后更新时间',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uq_mptp_task` (`task_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='月度计划任务进度表（当前值，一任务一行）';
+
+CREATE TABLE IF NOT EXISTS `monthly_plan_task_progress_history` (
+    `id` BIGINT NOT NULL COMMENT '雪花算法主键ID',
+    `task_id` BIGINT NOT NULL COMMENT '月度计划任务ID，逻辑关联 monthly_plan_task.id',
+    `revision` INT UNSIGNED NOT NULL COMMENT '本次保存后的进度版本号',
+    `changed_by` BIGINT NOT NULL COMMENT '操作人用户ID，逻辑关联 user_account.id',
+    `before_json` LONGTEXT NOT NULL COMMENT '保存前进度数据 JSON 快照',
+    `after_json` LONGTEXT NOT NULL COMMENT '保存后进度数据 JSON 快照',
+    `created_at` DATETIME(6) NOT NULL COMMENT '创建时间',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uq_mptph_task_revision` (`task_id`, `revision`),
+    KEY `idx_mptph_task_time` (`task_id`, `created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='月度计划任务进度历史表（逐版本快照）';
 
 -- =========================
 -- Django 框架表（admin/auth/contenttypes/sessions/migrations）
